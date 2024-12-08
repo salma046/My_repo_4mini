@@ -45,7 +45,8 @@ int execution_main(t_minishell data)
 				execve(command_path, temp_nodes->cmd, data.envirement);
 				free(command_path);
 				perror("execve");
-				exit(127);
+				g_minishell.exit_status = 127;
+				exit(g_minishell.exit_status);
 			}
 		}
 		int	i;
@@ -158,15 +159,19 @@ void fre_the_tokens(t_token *tokens)
 	}
 }
 
+// void	export_the_status()
+
 int	main(int ac, char *av[], char **env)
 {
 	signal(SIGINT, handle_sigint);
 	if (ac >= 2)
 		return (1);
 	(void)av;
+	g_minishell.exit_status = 0;
 	g_minishell.envirement = env;
 	g_minishell.envir = mk_env(g_minishell.envirement);
 	g_minishell.export_env = mk_env_4expo(g_minishell.envirement);
+	// export_the_status();
 
 	while (1)
 	{

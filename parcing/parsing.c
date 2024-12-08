@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 15:02:13 by salaoui           #+#    #+#             */
-/*   Updated: 2024/11/25 13:30:52 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/09 00:38:33 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_token	*ret_syntax_err(t_minishell g_minishell)
 {
 	printf("syntkax error\n");
+	g_minishell.exit_status = 2;
 	g_minishell.tokens = NULL;
 	return (g_minishell.tokens);
 }

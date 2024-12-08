@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:50 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/05 00:56:16 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/08 14:32:40 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,32 +102,4 @@ char	*remplace_doll_str(char *data, char *env_var)
 	else
 		word = remp_with_value(data, env_var);
 	return (word);
-}
-
-char	*rmp_dollar(char *t_word, t_token **to_list)
-{
-	int	i;
-	int	to_split;
-
-	to_split = -1;
-	i = 0;
-	while (t_word[i])
-	{
-		while (t_word[i] == '\'')
-			skip_quo(t_word, &i, '\'');
-		if (t_word[i] == '"')
-			skip_double_quo(t_word, &to_split, &i);
-		else if (t_word[i] == '$' && t_word[i + 1] == '$')
-		{
-			while (t_word[i] == '$' && t_word[i + 1] == '$')
-				i += 2;
-		}
-		else if (t_word[i] == '$' && ft_isalnum(t_word[i + 1]) == 0)
-			skip_if_isalnum(t_word, &i);
-		else if (t_word[i] == '$')
-			t_word = rmp_dollar2(t_word, &i, to_split, to_list);
-		else if (t_word[i])
-			i++;
-	}
-	return (t_word);
 }

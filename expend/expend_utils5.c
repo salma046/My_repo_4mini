@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:24:05 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/05 00:39:49 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/08 15:46:06 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,35 @@ char	*fill_first_part(char *env_var, int *i)
 	return (result);
 }
 
-char	*rmp_dollar2(char *t_word, int *i, int to_split, t_token **tokens_list)
+char	*rmp_dollar(char *t_word, t_token **to_list, int *is_ambiguous)
+{
+	int	i;
+	int	to_split;
+
+	to_split = -1;
+	i = 0;
+	while (t_word[i])
+	{
+		while (t_word[i] == '\'')
+			skip_quo(t_word, &i, '\'');
+		if (t_word[i] == '"')
+			skip_double_quo(t_word, &to_split, &i);
+		else if (t_word[i] == '$' && t_word[i + 1] == '$')
+		{
+			while (t_word[i] == '$' && t_word[i + 1] == '$')
+				i += 2;
+		}
+		else if (t_word[i] == '$' && ft_isalnum(t_word[i + 1]) == 0)
+			skip_if_isalnum(t_word, &i);
+		else if (t_word[i] == '$')
+			t_word = rmp_dollar2(t_word, &i, to_split, to_list, &is_ambiguous);
+		else if (t_word[i])
+			i++;
+	}
+	return (t_word);
+}
+
+char	*rmp_dollar2(char *t_word, int *i, int to_split, t_token **tokens_list, int **is_ambiguous)
 {
 	char	*env_var;
 	char	*word;
@@ -77,6 +105,10 @@ char	*rmp_dollar2(char *t_word, int *i, int to_split, t_token **tokens_list)
 		word = token_edi_env(t_word, env_var, tokens_list);
 	else
 		word = remplace_doll_str(t_word, env_var);
+	if (!word[0])
+		**is_ambiguous = 1;
+	else
+		**is_ambiguous = 0;
 	(*i) = 0;
 	return (word);
 }

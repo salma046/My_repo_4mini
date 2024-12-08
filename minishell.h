@@ -37,6 +37,7 @@ typedef enum e_token_type
 
 typedef struct s_token
 {
+	int				is_ambiguous;
 	char			*data;
 	token_type		data_type;
 	struct s_token	*next_token;
@@ -48,6 +49,7 @@ typedef struct s_redir
 {
 	token_type		red_type;
 	char			*file;
+	int				is_ambiguous;
 	struct s_redir	*next;
 }					t_redir;
 
@@ -86,9 +88,9 @@ char				*allocate_4_nword(char *str, char *env_var);
 char				*ft_join_words(char *word, char *str, int l);
 char				*remplace_doll_str(char *data, char *env_var);
 char				*after_dol_word(char *str, int l, int str_len);
-char				*rmp_dollar(char *tokens_word, t_token **tokens_list);
+char				*rmp_dollar(char *tokens_word, t_token **tokens_list, int *i);
 char				*rmp_dollar2(char *t_word, int *i, int to_split,
-						t_token **tokens_list);
+						t_token **tokens_list, int **is_ambiguous);
 char				*token_edi_env(char *str, char *env_var,
 						t_token **tokens_list);
 int					is_space(char *line);
@@ -117,7 +119,7 @@ void				fill_word_sgl_quot(char *word, char *str, int *i, int *j);
 void				ft_redi_add_back(t_redir **redirections,
 						t_redir *new_redir);
 void				fill_redi(enum e_token_type token_t, char *red_file,
-						t_redir **redirections);
+						t_redir **redirections, int is_true);
 void				token_new_edi_word(char *word, enum e_token_type token_t,
 						t_token **tokens_list);
 void				ft_put_token(char **line, enum e_token_type token_t,

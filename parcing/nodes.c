@@ -6,14 +6,14 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:59:29 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/06 13:58:26 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/08 15:52:17 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 void	fill_redi(enum e_token_type token_t, char *red_file,
-		t_redir **redirections)
+		t_redir **redirections, int is_true)
 {
 	t_redir	*new_redir;
 
@@ -22,6 +22,10 @@ void	fill_redi(enum e_token_type token_t, char *red_file,
 		return ;
 	new_redir->red_type = token_t;
 	new_redir->file = ft_strdup(red_file);
+	if (is_true == 1)
+		new_redir->is_ambiguous = 1;
+	else
+		new_redir->is_ambiguous = 0;
 	new_redir->next = NULL;
 	ft_redi_add_back(redirections, new_redir);
 }
@@ -59,7 +63,7 @@ void	fill_node(t_token *temp_tokens, t_node **node_list)
 	{
 		if (tokens->data_type != PIPE && tokens->data_type != WORD)
 		{
-			fill_redi(tokens->data_type, tokens->next_token->data, &redir);
+			fill_redi(tokens->data_type, tokens->next_token->data, &redir, temp_tokens->next_token->is_ambiguous);
 			tokens = tokens->next_token;
 		}
 		else
@@ -94,6 +98,14 @@ t_node	*mk_nodes(t_token *tokens)
 
 	nodes = NULL;
 	// current = tokens;
+	// t_token *tmmp = tokens;
+	// while (tmmp)
+	// {
+	// 	printf(("***********\n"));
+	// 	printf("the token is : %s and ambigu is: %d\n", tmmp->data, tmmp->is_ambiguous);
+	// 	printf(("***********\n"));
+	// 	tmmp = tmmp->next_token;
+	// }
 	fill_commands(&nodes, tokens);
 	// while (current)
 	// {

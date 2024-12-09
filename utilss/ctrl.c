@@ -9,3 +9,5 @@ void handle_sigint(int sig)
 	rl_redisplay();
 	g_minishell.exit_status = 130;
 }
+
+//sigquit == 131 exit status

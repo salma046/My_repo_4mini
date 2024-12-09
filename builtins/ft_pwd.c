@@ -10,5 +10,5 @@ void	ft_pwd(t_node *node)
 		write(node->out_file, "\n", 1);
 	}
 	else
-		perror("PWDD");
+		perror("PWD");
 }

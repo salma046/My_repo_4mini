@@ -12,9 +12,15 @@ int execution_main(t_minishell data)
 	if (data.count_pips == 1)
 	{
 		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "exit"))
+		{
 			ft_exit(&data);
+			return 0;
+		}
 		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "cd"))
+		{
 			ft_cd(&data);
+			return 0;
+		}
 		pid = fork();
 		if (pid == 0)
 		{
@@ -50,7 +56,7 @@ int execution_main(t_minishell data)
 					exit(g_minishell.exit_status);
 				}
 				execve(command_path, temp_nodes->cmd, data.envirement);
-				free(command_path);
+				free(command_path);////////
 				perror("execve");
 				g_minishell.exit_status = 127;
 				exit(g_minishell.exit_status);

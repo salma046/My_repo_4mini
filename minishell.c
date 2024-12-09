@@ -11,9 +11,15 @@ int execution_main(t_minishell data)
 
 	if (data.count_pips == 1)
 	{
+		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "exit"))
+			ft_exit(&data);
+		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "cd"))
+			ft_cd(&data);
 		pid = fork();
 		if (pid == 0)
 		{
+			signal(SIGINT, handle_sigint);
+			signal(SIGQUIT, SIG_IGN);
 			if (temp_nodes->redir && ft_check_redirections(temp_nodes) == -1)
 				exit(EXIT_FAILURE);
 			if (temp_nodes->redir && ft_check_redirections(temp_nodes) == 0)
@@ -40,7 +46,8 @@ int execution_main(t_minishell data)
 				if (!command_path)
 				{
 					fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
-					exit(127);
+					g_minishell.exit_status = 127;
+					exit(g_minishell.exit_status);
 				}
 				execve(command_path, temp_nodes->cmd, data.envirement);
 				free(command_path);
@@ -49,6 +56,8 @@ int execution_main(t_minishell data)
 				exit(g_minishell.exit_status);
 			}
 		}
+		if (pid != 0)
+			g_minishell.exit_status = 127;
 		int	i;
 		int	st;
 		int	stt;
@@ -159,11 +168,15 @@ void fre_the_tokens(t_token *tokens)
 	}
 }
 
-// void	export_the_status()
+void	handle_quit(int sig)
+{
+	(void)sig;
+}
 
 int	main(int ac, char *av[], char **env)
 {
 	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	if (ac >= 2)
 		return (1);
 	(void)av;
@@ -171,7 +184,7 @@ int	main(int ac, char *av[], char **env)
 	g_minishell.envirement = env;
 	g_minishell.envir = mk_env(g_minishell.envirement);
 	g_minishell.export_env = mk_env_4expo(g_minishell.envirement);
-	// export_the_status();
+	g_minishell.exit_status = 0;
 
 	while (1)
 	{
@@ -185,6 +198,8 @@ int	main(int ac, char *av[], char **env)
 			clear_history();
 			exit(1);
 		}
+		if (g_minishell.command[0] == '\0')
+			continue;
 		add_history(g_minishell.command);	
 		g_minishell.tokens = ft_tokenize(g_minishell);
 		free(g_minishell.command);

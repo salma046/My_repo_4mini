@@ -31,11 +31,58 @@ void	ft_put_token(char **line, enum e_token_type token_t,
 	(*line)++;
 }
 
+char	*remp_exit(char *word)
+{
+	char	*new_word;
+	char	*exit_w;
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	exit_w = ft_itoa(g_minishell.exit_status);
+	new_word = malloc(sizeof(char) * ft_strlen(word) + ft_strlen(exit_w) - 1);
+	if (!new_word)
+		return (NULL);
+	while (word[i])
+	{
+		if (word[i] == '$' && word[i + 1] == '?')
+		{
+			while(exit_w[k])
+				new_word[j++] = exit_w[k++];
+			i += 2;
+		}
+		else
+			new_word[j++] = word[i++];
+	}
+	new_word[j] = '\0';
+	free(word);
+	free(exit_w);
+	return (new_word);
+}
+
+char	*remplace_exit_value(char *word)
+{
+	int i;
+
+	i = 0;
+	while (word[i])
+	{
+		if (word[i] == '$' && word[i + 1] == '?')
+			return(remp_exit(word));
+		i++;
+	}
+	return (word);
+}
+
 void	token_new_word(char *word, enum e_token_type token_t,
 		t_token **tokens_list, int heredoc)
 {
 	t_token	*new_token;
 	char	*new_word;
+	char	*other_new_word;
 	int		i;
 
 	i = 0;
@@ -48,8 +95,9 @@ void	token_new_word(char *word, enum e_token_type token_t,
 	}
 	else
 		new_word = word;
+	other_new_word = remplace_exit_value(new_word);
 	new_token->prev_token = NULL;
-	new_token->data = new_word;
+	new_token->data = other_new_word;
 	new_token->is_ambiguous = i;
 	new_token->data_type = token_t;
 	new_token->next_token = NULL;

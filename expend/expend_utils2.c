@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:46:11 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/04 19:08:43 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/09 11:44:02 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ int	count_lenth2(char *str, int *i)
 	while (str[*i])
 		(*i)++;
 	return (j);
+}
+
+void	skip_2quo(char *tokens_word, int *i, int quot)
+{
+	(*i)++;
+	while (tokens_word[*i] && tokens_word[*i] != quot && tokens_word[*i] != '$')
+		(*i)++;
+	if (tokens_word[*i] == quot)
+		(*i)++;
 }
 
 void	skip_quo(char *tokens_word, int *i, int quot)

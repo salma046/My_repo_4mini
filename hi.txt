@@ -4,14 +4,14 @@
 "'"$$USER'"''$HOME'""// like $kdsjf
 	// ADD to this command an expend and it's result is null;
 
-'"'$$$USER'"''$HOME'"$USER"
+'"'$$$USER'"''$HOME'"$USER"          ❌
 
-'"'$$$USER'"''$HOME'"$U"
+'"'$$$USER'"''$HOME'"$U"             ❌
 
-'"'$$$$USER'"''$HOME'"$sdajkf""''''cat"
+'"'$$$$USER'"''$HOME'"$sdajkf""''''cat" ❌
 
-                           ❌❌❌❌❌❌❌❌❌❌❌❌
-"$$USER"'$HOME'"$USER" // "$$USER"'$HOME'"$asdfj" || "$$$USER"'$HOME'"$USER"
+                           ❌❌❌❌❌❌❌❌❌❌❌❌ 
+"$$USER"'$HOME'"$USER" // "$$USER"'$HOME'"$asdfj" || "$$$USER"'$HOME'"$USER"  ❌
 search for the diff between the rmp_val and rmp_null  
 
 $USER$USER
@@ -26,3 +26,4 @@ $USER$USER
 
 '"'$USER"'"'$gfhvk'"'$USER'" || "'"$USER'"''$gfhvk'"'$USER'"
 	// resent test fih loop infinite(les deux) croissant
+

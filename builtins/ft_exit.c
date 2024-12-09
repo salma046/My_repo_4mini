@@ -1,16 +1,56 @@
 #include "../minishell.h"
 
-void	ft_exit(t_minishell *data)
-{
-	t_token	*tmp_tokens;
-	int		exit_status;
+int is_numeric(const char *str) {
+    int i ;
 
-	tmp_tokens = data->tokens;
-	exit_status = 0;
-	if (tmp_tokens->next_token)
+    i = 0;
+    if (!str || !*str)
+        return 0;
+    while(str[i])
+    {
+        if (!ft_isdigit(str[i]) && !(i == 0 && (str[i] == '-' || str[i] == '+')))
+            return 0;
+        i++;
+    }
+    return 1;
+}
+
+
+void ft_exit(t_minishell *data)
+{
+	t_node	*tmp_node;
+	tmp_node = data->nodes;
+    if (!tmp_node || !tmp_node->cmd) {
+        printf("exit\n");
+        exit(0);
+    }
+    int i = 0;
+    while (tmp_node->cmd[i]) {
+        i++;
+    }
+
+    if (i > 2) {
+        if (!is_numeric(tmp_node->cmd[1]))
+        {
+            printf("bash: exit: %s: numeric argument required\n", tmp_node->cmd[1]);
+            exit(data->exit_status);
+        }
+        data->exit_status = 2;
+        return ;  
+    }
+    if (tmp_node->cmd[1])
 	{
-		exit_status = ft_atoi(tmp_tokens->next_token->data);
-		printf("%d", exit_status);
-	}
-	exit(exit_status);
+        if (is_numeric(tmp_node->cmd[1])) {
+        
+            data->exit_status = ft_atoi(tmp_node->cmd[1]) % 256; 
+        } 
+        else
+        {
+            printf("bash: exit: %s: numeric argument required\n", tmp_node->cmd[1]);
+            data->exit_status  = 2;
+            exit(data->exit_status);
+        }
+    }
+    exit(data->exit_status);
+        // printf("fiin:%d\n", data->exit_status);
 }

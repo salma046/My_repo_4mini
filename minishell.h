@@ -112,6 +112,7 @@ void				free_redir_list(t_redir *redir);
 void				free_node_list(t_node *node_list);
 void				skip_double_signs(char *str, int *i);
 void				skip_quo(char *tokens_word, int *i, int quot);
+void				skip_2quo(char *tokens_word, int *i, int quot);
 void				skip_if_isalnum(char *tokens_word, int *i);
 void				ft_lstadd_back_token(t_token **lst, t_token *new);
 void				skip_double_quo(char *tokens_word, int *to_split, int *i);

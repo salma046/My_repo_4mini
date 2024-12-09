@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:50 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/08 14:32:40 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/09 18:19:19 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	count_dollar_lenth(char *str)
 	int	j;
 
 	i = 0;
+	j = 0;
 	while (str[i] != '\0')
 	{
 		while (str[i] && str[i] != '\'' && is_not_valid_expend(str, i) == 1)
@@ -25,7 +26,7 @@ int	count_dollar_lenth(char *str)
 		while (str[i] == '\'')
 			skip_quo(str, &i, '\'');
 		if (str[i] == '"')
-			skip_quo(str, &i, '"');
+			skip_2quo(str, &i, '"');
 		while (str[i] && str[i] != '\'' && str[i] != '"' && str[i + 1] != '$'
 			&& is_not_valid_expend(str, i) == 1)
 			i++;

@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 10:54:38 by salaoui           #+#    #+#             */
-/*   Updated: 2024/11/22 14:35:11 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/09 11:44:48 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,5 @@ int	valid_word(char *str, int i)
 void	skip_double_signs(char *str, int *i)
 {
 	while (str[*i] == '$' && str[(*i) + 1] == '$')
-		i += 2;
+		(*i) += 2;
 }

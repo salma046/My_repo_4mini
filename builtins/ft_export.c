@@ -117,10 +117,10 @@ int	search_special_char(char *token_data, t_node *node)
 	{
 		if (is_special_char(token_data[i]))
 		{
-			write(tmp_node->out_file, "bash: export: ", ft_strlen("bash: export: "));
-			write(tmp_node->out_file, token_data, ft_strlen(token_data));
-			write(tmp_node->out_file, "': not a valid identifier", ft_strlen("': not a valid identifier"));
-			write(tmp_node->out_file, "\n", 1);
+			write(STDERR_FILENO, "bash: export: ", ft_strlen("bash: export: "));
+			write(STDERR_FILENO, token_data, ft_strlen(token_data));
+			write(STDERR_FILENO, "': not a valid identifier", ft_strlen("': not a valid identifier"));
+			write(STDERR_FILENO, "\n", 1);
 			// printf("bash: export: %s': not a valid identifier\n",
 			// 	token_data);// use the write and in the fd;;;;;
 			return (1);
@@ -146,21 +146,17 @@ int	check_all_tokens(char **args, t_node *nodes)
 	return (0);
 }
 
-void	ft_add_to_export_arg(t_node *nodes, t_env *expo_envir,
+int	ft_add_to_export_arg(t_node *nodes, t_env *expo_envir,
 		t_env *env_envir)
 {
 	char	**commands;
-	char	*token_data;
 
 	commands = nodes->cmd;
 	if (!commands || !commands[1] || !expo_envir)
-		return ;
-	if (check_all_tokens(commands, nodes) == 1)
-		return ;
+		return (-1);
 	commands++;
 	while (*commands)
 	{
-		printf("\nthe word will be added is: %s\n", *commands);
 		if (*commands == NULL)
 		{
 			commands++;
@@ -168,37 +164,37 @@ void	ft_add_to_export_arg(t_node *nodes, t_env *expo_envir,
 		}
 		if (not_valid(*commands) == 1)
 		{
-			write(nodes->out_file, "bash: export: ", ft_strlen("bash: export: "));
-			write(nodes->out_file, token_data, ft_strlen(token_data));
-			write(nodes->out_file, "': not a valid identifier", ft_strlen("': not a valid identifier"));
-			write(nodes->out_file, "\n", 1);
-			// printf("bash: export: %s': not a valid identifier\n", token_data);
-			return ;
+			write(STDERR_FILENO, "bash: export: ", ft_strlen("bash: export: "));
+			write(STDERR_FILENO, *commands, ft_strlen(*commands));
+			write(STDERR_FILENO, "': not a valid identifierrr", ft_strlen("': not a valid identifier"));
+			write(STDERR_FILENO, "\n", 1);
+			return (0);
 		}
 		process_key(*commands, expo_envir, env_envir);
 		commands++;
 	}
+	return (0);
 }
 
-void	ft_export(t_minishell *data, t_env *expo_envir, t_env *env_envir)
+int	ft_export(t_minishell *data, t_env *expo_envir, t_env *env_envir)
 {
 	int	active;
 	t_node *tmp_nodes;
 
 	tmp_nodes = data->nodes;
 	if (!tmp_nodes->cmd[0] || !expo_envir)
-		return ;
+		return (0);
 	active = 1;
 	if ((tmp_nodes->cmd[1] == NULL && tmp_nodes->cmd[0]))
 	{
 		if (!ft_strcmp(tmp_nodes->cmd[0], "export"))
-			ft_env_export_once(tmp_nodes, expo_envir, active);
-		// return ;
+			g_minishell.exit_status = ft_env_export_once(tmp_nodes, expo_envir, active);
 	}
 	else
 	{
 		active = 0;
-		ft_add_to_export_arg(tmp_nodes, expo_envir, env_envir);
+		g_minishell.exit_status = ft_add_to_export_arg(tmp_nodes, expo_envir, env_envir);
 	}
 	search_check_add_env(expo_envir, env_envir);
+	return (g_minishell.exit_status);
 }

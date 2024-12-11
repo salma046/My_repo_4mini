@@ -6,6 +6,7 @@ int	ft_check_redirections(t_node *nodes)
 	t_redir	*tmp_redir;
 
 	tmp_node = nodes;
+	char *str = "bash: ambiguous redirect\n";
 	while (tmp_node)
 	{
 		tmp_redir = tmp_node->redir;
@@ -13,11 +14,15 @@ int	ft_check_redirections(t_node *nodes)
 		{
 			if (tmp_redir->is_ambiguous == 1)
 			{
-				fprintf(stderr, "bash: ambiguous redirect\n");
+			printf("helllllllo world\n");
+				write(2, str, ft_strlen(str));
         		g_minishell.exit_status = 1;
-				if (g_minishell.count_pips != 1)
+				if (g_minishell.count_pips > 1)
 					exit (1);
-				tmp_node = tmp_node->next_node;
+				if (g_minishell.count_pips == 1)
+					return (-1);
+				if (tmp_node->next_node)
+					tmp_node = tmp_node->next_node;
 				break;
 			}
 			if (tmp_redir->red_type == INP_REDIR) //  <

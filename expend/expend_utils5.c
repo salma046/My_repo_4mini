@@ -6,14 +6,14 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:24:05 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/09 12:25:27 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/10 18:56:30 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 void	token_new_edi_word(char *word, enum e_token_type token_t,
-		t_token **tokens_list)
+		t_token **tokens_list, int i)
 {
 	t_token	*new_token;
 
@@ -23,6 +23,7 @@ void	token_new_edi_word(char *word, enum e_token_type token_t,
 	new_token->data = word;
 	new_token->data_type = token_t;
 	new_token->next_token = NULL;
+	new_token->is_ambiguous = i;
 	ft_lstadd_back_token(tokens_list, new_token);
 }
 

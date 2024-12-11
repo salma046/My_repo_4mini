@@ -52,5 +52,4 @@ void ft_exit(t_minishell *data)
         }
     }
     exit(data->exit_status);
-        // printf("fiin:%d\n", data->exit_status);
 }

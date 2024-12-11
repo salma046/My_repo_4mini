@@ -10,18 +10,28 @@ void	sig_here_doc(int signal)
 	exit(g_minishell.exit_status);
 }
 
+void	printf_missing_lim(int fd)
+{
+	printf("missing limiter\n");
+	g_minishell.exit_status = 0;
+	close (fd);
+	exit(g_minishell.exit_status);
+}
+
 int	ft_start_heredoc_child(int fd, char *limiter)
 {
 	char	*line;
 
-	signal(SIGINT, sig_here_doc);
+	// signal(SIGINT, sig_here_doc);
 	line = readline("heredoc>");
 	while (line)
 	{
 		if (!ft_strncmp(line, limiter, ft_strlen(limiter))
 			&& (ft_strlen(line) == ft_strlen(limiter)))
 		{
-			exit (g_minishell.exit_status = 0);
+			free(line);
+			close(fd);
+			exit (0);
 		}
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)))
 		{
@@ -29,13 +39,11 @@ int	ft_start_heredoc_child(int fd, char *limiter)
 				line = ft_strdup("");
 		}
 		ft_putendl_fd(line, fd);
-		if (strcmp(line, limiter))
-			free(line);
+		// free(line);
 		line = readline("heredoc>");
 	}
-	printf("missing limiter\n");
-	close(fd);
-	exit(g_minishell.exit_status);
+	printf_missing_lim(fd);
+	return (0);
 }
 
 int	ft_start_heredoc(int fd, char *limiter)
@@ -49,7 +57,6 @@ int	ft_start_heredoc(int fd, char *limiter)
 	if (pid == 0)
 		ft_start_heredoc_child(fd, limiter);
 	waitpid(pid, &status, 0);
-	close(fd);
 	if (WIFEXITED(status))
 		g_minishell.exit_status = WEXITSTATUS(status);
 	return (g_minishell.exit_status);
@@ -84,18 +91,13 @@ int	ft_heredoc(t_token *tokens)
 	if (tokens->next_token->data_type == WORD)
 	{
 		limiter = tokens->next_token->data;
-		start_heredoc(fd, limiter);
-		if (g_minishell.exit_status == 130)
-		{
-			fprintf(stderr, "Hello World\n");
-			unlink(file);
-			return (-1);
-		}
-		fd = open("/tmp/heredoc", O_RDONLY);
-		file = "/tmp/heredoc.txt";
-		change_value(tokens, file);
-		// unlink(file); //// some problems are here!!!
+		if (start_heredoc(fd, limiter) < 0)
+			return (close(fd), -1);
+		else
+			return (close(fd), change_value(tokens, file), 1);
 	}
+	else
+		return (close(fd), -1);
 	return (0);
 }
 

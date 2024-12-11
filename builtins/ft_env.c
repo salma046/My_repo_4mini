@@ -1,23 +1,26 @@
 #include "../minishell.h"
 
-// I called the function normaly of env.
-void	ft_env(t_node *node, t_minishell **data)
+void	ft_env(char **cmds, t_minishell *data)
 {
 	t_env	*tmp;
 
-	tmp = (*data)->envir;
-	while (tmp)
+	// node = data->nodes;
+	tmp = data->envir;
+	// printf ("[%s]\n", node->cmd[0]);
+	// printf ("[%s]\n", node->cmd[1]);
+	if (tmp && cmds[1] == NULL)
 	{
-		if (tmp->value != NULL)
+		while (tmp)
 		{
-			write(node->out_file, tmp->key, ft_strlen(tmp->key));
-			write(node->out_file, "=", 1);
-			write(node->out_file, tmp->value, ft_strlen(tmp->value));
-			write(node->out_file, "\n", 1);
-			// printf("%s", tmp->key);
-			// printf("%c", '=');
-			// printf("%s\n", tmp->value);
+			if (tmp->value != NULL)
+			{
+				printf("%s", tmp->key);
+				printf("%c", '=');
+				printf("%s\n", tmp->value);
+			}
+			tmp = tmp->next;
 		}
-		tmp = tmp->next;
 	}
+	else
+		fprintf (stderr, "env: %s: No such file or directory\n", cmds[1]);
 }

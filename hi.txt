@@ -27,3 +27,12 @@ $USER$USER
 '"'$USER"'"'$gfhvk'"'$USER'" || "'"$USER'"''$gfhvk'"'$USER'"
 	// resent test fih loop infinite(les deux) croissant
 
+
+
+	EXPEND HEREDOC TEXT
+	EXIT STATUS
+	LEAKS
+	NORMINETTE
+	CHECK FOR OPEN FDS...
+	HEREDOC IN CASE : << LIM CAT ==> 1/n 2/n 3/n ==> THE LIM OR CNTR+D
+

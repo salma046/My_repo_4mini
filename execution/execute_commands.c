@@ -1,46 +1,61 @@
 #include "../minishell.h"
 
-char    *find_command_path(char *command, char **env){
+char *find_command_path(char *command, char **env) 
+{
+    char *path_env = NULL;
+    char full_path[1024];
+    int i = 0, j = 0, k = 0;
 
-        char *path_env = NULL;
-        char full_path[1024];
-        int i = 0, j = 0, k = 0;
+    if (ft_strchr(command, '/') != NULL) 
+    {
+        if (access(command, X_OK) == 0)
+            return ft_strdup(command);
+        return NULL;
+    }
 
-        while (env[i] != NULL) 
+    while (env[i] != NULL) 
+    {
+        if (ft_strncmp(env[i], "PATH=", 5) == 0) 
         {
-            if (strncmp(env[i], "PATH=", 5) == 0) {
-                path_env = env[i] + 5; 
-            }
-            i++;
+            path_env = env[i] + 5; 
+            break;  
         }
-        if (!path_env) {
-            errno = ENOENT;
-            perror("PATH not found");
-            return NULL;
-        }
-        i = 0;
-        while (path_env[i] != '\0') 
-        {
-            ft_memset(full_path, 0, sizeof(full_path));
-            k = 0;
+        i++;
+    }
 
-            while (path_env[i] != ':' && path_env[i] != '\0') {
-                full_path[k++] = path_env[i++];
-            }
-            full_path[k++] = '/';
-            j = 0;
-            while (command[j] != '\0') {
-                full_path[k++] = command[j++];
-            }
-            full_path[k] = '\0';
-
-            if (access(full_path, X_OK) == 0) {
-                return ft_strdup(full_path);
-            }
-            if (path_env[i] == ':')
-                i++;
-        }
+    if (!path_env) {
         errno = ENOENT;
+        perror("PATH not found");
+        return NULL;
+    }
+
+    i = 0;
+    while (path_env[i] != '\0') 
+    {
+        ft_memset(full_path, 0, sizeof(full_path));
+        k = 0;
+
+        while (path_env[i] != ':' && path_env[i] != '\0') {
+            full_path[k++] = path_env[i++];
+        }
+        full_path[k++] = '/';
+
+        j = 0;
+        while (command[j] != '\0') {
+            full_path[k++] = command[j++];
+        }
+        full_path[k] = '\0';
+
+
+        if (access(full_path, X_OK) == 0) {
+            printf("Executable found: %s\n", full_path);
+            return ft_strdup(full_path);
+        }
+        if (path_env[i] == ':')
+            i++;
+    }
+    errno = ENOENT;
+    fprintf(stderr, "No executable found for: %s\n", command);
     return NULL;
 }
 
@@ -81,7 +96,7 @@ int ft_execute(t_minishell data, t_node *nodes, char **env)
 		// write(nodes->out_file, args[0], ft_strlen(args[0]));
 		// write(nodes->out_file, ": command not found", ft_strlen(": command not found"));
         // write(nodes->out_file, "\n", 1);
-		printf("%s: command not found\n", args[0]);
+		fprintf(stderr, "%s: command not found\n", args[0]);
         return 127;
     }
 

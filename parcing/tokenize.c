@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 09:53:45 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/08 14:06:15 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/11 16:06:45 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_skipp_spaces(char **line)
 {
-	while (**line == ' ' || **line == '\t' || **line == '\n' || **line == 'v'
+	while (**line == ' ' || **line == '\t' || **line == '\n' || **line == '\v'
 		|| **line == '\r')
 	{
 		(*line)++;
@@ -33,6 +33,7 @@ t_token	*ft_tokenize(t_minishell g_minishell)
 	tokens_list = NULL;
 	herdoc = -1;
 	line = g_minishell.command;
+
 	while (*line)
 	{
 		if (ft_skipp_spaces(&line) == 1)

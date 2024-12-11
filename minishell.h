@@ -135,7 +135,7 @@ t_node				*mk_nodes(t_token *tokens);
 t_node				*allocate_for_node(t_token *temp_tokens);
 void				free_env_list(t_env *head);
 void				fre_the_tokens(t_token *tokens);
-
+char				*ft_getenv(char *key, t_env *envir);
 
 
 // functionts utils ✙:
@@ -171,7 +171,7 @@ int					assign_files(t_minishell data, t_node *nodes);
 // void				ft_env_export_once(t_token *token, int active);
 // void			ft_add_to_export_arg(t_token *token);
 
-char    *find_command_path(char *command, char **env);
+char    *find_command_path(char *command, t_env *env) ;
 // execute commands 🚀:
 int ft_execute(t_minishell data, t_node *nodes, char **env);
 

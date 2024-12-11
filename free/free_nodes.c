@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 10:05:58 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/11 11:51:07 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/11 11:54:32 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,4 @@ void fre_the_tokens(t_token *tokens)
 		free(current);
 		current = next;
 	}
-	printf("helllo free node\n");
 }

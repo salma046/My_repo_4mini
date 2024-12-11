@@ -68,7 +68,6 @@ int	check_command(t_minishell *data, t_node *node)
 
 	if (data->count_pips == 1)
 	{
-		fprintf(stdout, "in builtins one node\n");
 		return (execute_the_builtin(data, node, node->cmd));
 	}
 	else if (data->count_pips > 1)

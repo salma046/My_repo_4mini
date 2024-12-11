@@ -55,17 +55,12 @@ int execution_main(t_minishell data)
 		{
 			signal(SIGINT, handle_sigint);
 			signal(SIGQUIT, SIG_IGN);
-			char *command_path = find_command_path(temp_nodes->cmd[0], data.envirement);
-			if (!command_path)
+			char *command_path = find_command_path(temp_nodes->cmd[0], data.envir);
+			if (execve(command_path, temp_nodes->cmd, data.envirement) == -1)
 			{
-				fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
+				fprintf(stderr, "Command '%s' not found\n", temp_nodes->cmd[0]);
 				g_minishell.exit_status = 127;
-				exit(g_minishell.exit_status);
 			}
-			execve(command_path, temp_nodes->cmd, data.envirement);
-			free(command_path);
-			perror("execve");
-			g_minishell.exit_status = 127;
 			exit(g_minishell.exit_status);
 		}
 		printf("hello world\n");
@@ -126,14 +121,14 @@ int execution_main(t_minishell data)
 				}
 				else
 				{
-					char *command_path = find_command_path(temp_nodes->cmd[0], data.envirement);
+					char *command_path = find_command_path(temp_nodes->cmd[0], data.envir);
 					if (!command_path)
 					{
 						fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
+						free(command_path);
 						exit(127);
 					}
 					execve(command_path, temp_nodes->cmd, data.envirement);
-					free(command_path);
 					perror("execve");
 					exit(127);
 				}
@@ -168,8 +163,6 @@ int execution_main(t_minishell data)
 
 int	main(int ac, char *av[], char **env)
 {
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
 	if (ac >= 2)
 		return (1);
 	(void)av;
@@ -181,6 +174,8 @@ int	main(int ac, char *av[], char **env)
 
 	while (1)
 	{
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		g_minishell.command = readline("Minishell~$ ");
 		if (!g_minishell.command)
 		{
@@ -205,7 +200,6 @@ int	main(int ac, char *av[], char **env)
 		if (main_heredoc(g_minishell.tokens) < 0)
 			continue ;
 		g_minishell.exit_status = execution_main(g_minishell);
-		fre_the_tokens(g_minishell.tokens);
 		free_node_list(g_minishell.nodes);
 	}
 }

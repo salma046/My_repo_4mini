@@ -30,6 +30,7 @@ $USER$USER
 
 
   ************************
+    << lim cat | echo hi (to test fach nsalli)
 	EXPEND HEREDOC's TEXT ($)  (secondary)
 	EXIT STATUS  (between prima. & secondary)
 	LEAKS   (primary)

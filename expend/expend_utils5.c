@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:24:05 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/13 13:36:15 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/13 17:38:50 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ char	*rmp_dollar2(char *t_word, int *i, int to_split, t_token **tokens_list, int
 	{
 		return (word);
 	}
-	if (!word[0])
+	if (!word || word[0] == '\0')
 		**is_ambiguous = 1;
 	else
 		**is_ambiguous = 0;

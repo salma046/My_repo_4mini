@@ -10,9 +10,9 @@ int execution_main(t_minishell data)
     int in_fd2 = dup(STDOUT_FILENO);
     pid_t pid;
 
-	if (temp_nodes->redir)
+	if (temp_nodes->redir && ft_check_redirections(temp_nodes) )
 	{
-		ft_check_redirections(temp_nodes);
+		return (-1);
 	}
 	if (data.count_pips == 1)
 	{
@@ -45,24 +45,27 @@ int execution_main(t_minishell data)
 		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "cd"))
 		{
 			ft_cd(&data);
+			dup2(in_fd, 0);
+			dup2(in_fd2, 1);
+			close(in_fd);
+			close(in_fd2);
 			return 0;
+		}
+		if (ft_check_builtins(temp_nodes->cmd[0]) == 1)
+		{
+			check_command(&data, temp_nodes);
+			dup2(in_fd, 0);
+			dup2(in_fd2, 1);
+			close(in_fd);
+			close(in_fd2);
+			return (g_minishell.exit_status = 1);
 		}
 		pid = fork();
 		if (pid == 0)
 		{
 			signal(SIGINT, handle_sigint);
 			signal(SIGQUIT, handle_sigquit);
-			if (ft_check_builtins(temp_nodes->cmd[0]) == 1)
-			{
-				check_command(&data, temp_nodes);
-				dup2(in_fd, 0);
-				dup2(in_fd2, 1);
-				close(in_fd);
-				close(in_fd2);
-				free_mystructs();
-				exit (g_minishell.exit_status = 1);
-			}
-			else
+			if (ft_check_builtins(temp_nodes->cmd[0]) != 1)
 			{
 				signal(SIGINT, handle_sigint);
 				signal(SIGQUIT, handle_sigquit);
@@ -77,13 +80,12 @@ int execution_main(t_minishell data)
 					dup2(in_fd2, 1);
 					close(in_fd);
 					close(in_fd2);
-					write(1, "hahahahaha\n", ft_strlen("hahahahaha\n"));
 					exit(g_minishell.exit_status);
 				}
 				execve(command_path, temp_nodes->cmd, data.envirement);
+				free_mystructs();
 				perror("execve");
 				g_minishell.exit_status = 127;
-				// free_mystructs();
 				// exit(g_minishell.exit_status);
 			}
 		}

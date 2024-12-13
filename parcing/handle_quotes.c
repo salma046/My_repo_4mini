@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 09:53:36 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/13 12:41:23 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/13 15:40:59 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ t_token	*rm_qotes(t_token *tokens)
 				temp_tokens->data = remplac_str(temp_tokens->data,
 						len, n_quotes);
 			}
-			else if(!n_quotes && temp_tokens->prev_token && temp_tokens->prev_token->data_type == 2)
-				temp_tokens->quotes_heredoc = 0;
+			// else if(!n_quotes && temp_tokens->prev_token && temp_tokens->prev_token->data_type == 2)
+			// 	temp_tokens->quotes_heredoc = 0;
 		}
 		temp_tokens = temp_tokens->next_token;
 	}

@@ -49,6 +49,7 @@ void	token_new_word(char *word, enum e_token_type token_t,
 	else
 		new_word = word;
 	new_token->prev_token = NULL;
+	new_token->quotes_heredoc = 0;
 	new_token->data = new_word;
 	new_token->is_ambiguous = i;
 	new_token->data_type = token_t;

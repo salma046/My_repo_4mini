@@ -14,16 +14,13 @@ int	ft_check_redirections(t_node *nodes)
 		{
 			if (tmp_redir->is_ambiguous == 1)
 			{
-			printf("helllllllo world\n");
 				write(2, str, ft_strlen(str));
         		g_minishell.exit_status = 1;
-				if (g_minishell.count_pips > 1)
-					exit (1);
-				if (g_minishell.count_pips == 1)
+				if (g_minishell.count_pips == 1 || !tmp_node->next_node)
 					return (-1);
-				if (tmp_node->next_node)
+				else
 					tmp_node = tmp_node->next_node;
-				break;
+				continue;
 			}
 			if (tmp_redir->red_type == INP_REDIR) //  <
 			{

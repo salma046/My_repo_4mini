@@ -12,7 +12,6 @@ void	sig_here_doc(int signal)
 {
 	(void)signal;
 	close(g_minishell.exit_status);
-	// printf("it's a sigint \n");
 	write(1, "\n", 1);
 	g_minishell.exit_status = 130;
 	free_mystructs2();

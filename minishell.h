@@ -38,6 +38,7 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	int				is_ambiguous;
+	int				quotes_heredoc;
 	char			*data;
 	token_type		data_type;
 	struct s_token	*next_token;
@@ -79,7 +80,7 @@ typedef struct s_minishell
 
 extern t_minishell	g_minishell;
 
-
+void sigint_handler(int sig);
 char 				**mk_tenv_char(t_env *envir);
 char				*get_word(char *str, int i);
 char				*get_env_var(char *str, int i);
@@ -136,7 +137,7 @@ t_node				*allocate_for_node(t_token *temp_tokens);
 void				free_env_list(t_env *head);
 void				fre_the_tokens(t_token *tokens);
 char				*ft_getenv(char *key, t_env *envir);
-
+void				free_mystructs();
 
 // functionts utils ✙:
 char				*ft_strncpy(char *dst, const char *src, size_t len);
@@ -182,8 +183,8 @@ int					ft_append(char *file_name, t_node *node);
 int					ft_check_redirections(t_node *nodes);
 int					main_heredoc(t_token *tokens);
 int					ft_heredoc(t_token *tokens);
-int					start_heredoc(int fd, char *limiter);
-int					ft_start_heredoc(int fd, char *limiter);
+int					start_heredoc(int fd, char *limiter, t_token *token);
+int					ft_start_heredoc(int fd, char *limiter, t_token *token);
 void				free_fds(t_minishell data);
 
 // error 🚨:

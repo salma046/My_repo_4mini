@@ -50,14 +50,14 @@ char *find_command_path(char *command, t_env *env)
 
 
         if (access(full_path, X_OK) == 0) {
-            printf("Executable found: %s\n", full_path);
+            // printf("Executable found: %s\n", full_path);
             return ft_strdup(full_path);
         }
         if (path_env[i] == ':')
             i++;
     }
     errno = ENOENT;
-    fprintf(stderr, "No executable found for: %s\n", command);
+    // fprintf(stderr, "No executable found for: %s\n", command);
     return NULL;
 }
 

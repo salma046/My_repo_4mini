@@ -81,6 +81,7 @@ int	check_command(t_minishell *data, t_node *node)
 		else if (pid == 0)
 		{
 			execute_the_builtin(data, node, node->cmd);
+			free_mystructs();
 			exit(0); //Child proccess;;; // save the return exit status to be put on the $?
 		}
 	}

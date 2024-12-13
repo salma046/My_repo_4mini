@@ -6,21 +6,25 @@ int execution_main(t_minishell data)
 {
     t_node *temp_nodes = data.nodes;
     int pipe_fd[2] = {-1, -1};
-    int in_fd = dup(STDIN_FILENO);
+    int in_fd = dup(STDOUT_FILENO);
     int in_fd2 = dup(STDOUT_FILENO);
     pid_t pid;
 
+	if (temp_nodes->redir)
+	{
+		ft_check_redirections(temp_nodes);
+	}
 	if (data.count_pips == 1)
 	{
-		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "exit"))
-			ft_exit(&data);
-		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "cd"))
-			ft_cd(&data);
-		if (temp_nodes->redir && ft_check_redirections(temp_nodes) == -1)
+		if (data.nodes->cmd[0] == NULL)
 		{
-			return (1);
+			if (temp_nodes->redir->red_type == OUT_REDIR || temp_nodes->redir->red_type == APPEND)
+				close(temp_nodes->out_file);
+			if (temp_nodes->redir->red_type == INP_REDIR)
+				close(temp_nodes->in_file);
+			return (g_minishell.exit_status); 
 		}
-		if (temp_nodes->redir)
+		else if (temp_nodes->redir)
 		{
 			if (temp_nodes->redir->red_type == OUT_REDIR || temp_nodes->redir->red_type == APPEND)
 			{
@@ -33,37 +37,60 @@ int execution_main(t_minishell data)
 				close(temp_nodes->in_file);
 			}
 		}
-		if (temp_nodes->cmd[0] == NULL)
+		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "exit"))
 		{
-			dup2(in_fd,0);
-			dup2(in_fd2,1);
-			close(in_fd);
-			close(in_fd2);
-			return (data.exit_status);
+			ft_exit(&data);
+			return 0;
 		}
-		if (ft_check_builtins(temp_nodes->cmd[0]) == 1)
+		if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "cd"))
 		{
-			check_command(&data, temp_nodes);
-			dup2(in_fd,0);
-			dup2(in_fd2,1);
-			close(in_fd);
-			close(in_fd2);
-			return (data.exit_status);
+			ft_cd(&data);
+			return 0;
 		}
 		pid = fork();
 		if (pid == 0)
 		{
 			signal(SIGINT, handle_sigint);
-			signal(SIGQUIT, SIG_IGN);
-			char *command_path = find_command_path(temp_nodes->cmd[0], data.envir);
-			if (execve(command_path, temp_nodes->cmd, data.envirement) == -1)
+			signal(SIGQUIT, handle_sigquit);
+			if (ft_check_builtins(temp_nodes->cmd[0]) == 1)
 			{
-				fprintf(stderr, "Command '%s' not found\n", temp_nodes->cmd[0]);
-				g_minishell.exit_status = 127;
+				check_command(&data, temp_nodes);
+				dup2(in_fd, 0);
+				dup2(in_fd2, 1);
+				close(in_fd);
+				close(in_fd2);
+				free_mystructs();
+				exit (g_minishell.exit_status = 1);
 			}
-			exit(g_minishell.exit_status);
+			else
+			{
+				signal(SIGINT, handle_sigint);
+				signal(SIGQUIT, handle_sigquit);
+				char *command_path = find_command_path(temp_nodes->cmd[0], data.envir);
+				if (!command_path)
+				{
+					fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
+					g_minishell.exit_status = 127;
+					free_mystructs();
+					free(command_path);
+					dup2(in_fd, 0);
+					dup2(in_fd2, 1);
+					close(in_fd);
+					close(in_fd2);
+					write(1, "hahahahaha\n", ft_strlen("hahahahaha\n"));
+					exit(g_minishell.exit_status);
+				}
+				execve(command_path, temp_nodes->cmd, data.envirement);
+				perror("execve");
+				g_minishell.exit_status = 127;
+				// free_mystructs();
+				// exit(g_minishell.exit_status);
+			}
 		}
-		printf("hello world\n");
+		dup2(in_fd, 0);
+		dup2(in_fd2, 1);
+		close(in_fd);
+		close(in_fd2);
 		if (pid != 0)
 			g_minishell.exit_status = 127;
 		int	i;
@@ -93,7 +120,10 @@ int execution_main(t_minishell data)
 			if (pid == 0) 
 			{
 				if (temp_nodes->redir && ft_check_redirections(temp_nodes) == -1)
+				{
+					free_mystructs();
 					exit(EXIT_FAILURE);
+				}
 				if (temp_nodes->next_node)
 				{
 					dup2(pipe_fd[1], STDOUT_FILENO); // Redirect output to pipe.
@@ -117,6 +147,7 @@ int execution_main(t_minishell data)
 				if (ft_check_builtins(temp_nodes->cmd[0]) == 1)
 				{
 					check_command(&data, temp_nodes);
+					free_mystructs();
 					exit(EXIT_SUCCESS);
 				}
 				else
@@ -126,10 +157,12 @@ int execution_main(t_minishell data)
 					{
 						fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
 						free(command_path);
+						free_mystructs();
 						exit(127);
 					}
 					execve(command_path, temp_nodes->cmd, data.envirement);
 					perror("execve");
+					free_mystructs();
 					exit(127);
 				}
 			}
@@ -195,11 +228,13 @@ int	main(int ac, char *av[], char **env)
 			continue ;
 		g_minishell.tokens = rm_qotes(g_minishell.tokens);
 		g_minishell.tokens = parsing(g_minishell);
+		if (!g_minishell.tokens || main_heredoc(g_minishell.tokens) < 0)
+			continue ;
 		g_minishell.nodes = mk_nodes(g_minishell.tokens);
 		g_minishell.count_pips = count_pipe(g_minishell.nodes);
-		if (main_heredoc(g_minishell.tokens) < 0)
-			continue ;
-		g_minishell.exit_status = execution_main(g_minishell);
+		execution_main(g_minishell);
+		fre_the_tokens(g_minishell.tokens);
 		free_node_list(g_minishell.nodes);
 	}
 }
+

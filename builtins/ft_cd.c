@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 21:56:34 by saait-si          #+#    #+#             */
-/*   Updated: 2024/12/12 13:25:48 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/13 12:03:05 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	ft_cd(t_minishell *data)
 			{
 				if (!tmp_node->cmd[i + 1])
 				{
-					printf("hwllo\n");
 					return (ft_cd_home(tmp_node->cmd[i]));
 				}
 				return (ft_cd_path(tmp_node->cmd[i + 1]));

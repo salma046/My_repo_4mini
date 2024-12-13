@@ -30,15 +30,19 @@ $USER$USER
 
 
   ************************
-    << lim cat | echo hi (to test fach nsalli)
-	EXPEND HEREDOC's TEXT ($)  (secondary)
-	EXIT STATUS  (between prima. & secondary)
-	LEAKS   (primary)
-	NORMINETTE  (primary)
-	CHECK FOR OPEN FDS...  (last)
-	HEREDOC IN CASE : << LIM CAT ==> 1/n 2/n 3/n ==> THE LIM OR CNTR+D (to ask a friend)
-	(second) -buil: or not a buil: cmd > $dskl should be ambiguous not fd error(prolly a problem in indicating that $dskl is an ambiguous file)
-	(second) -export a="ls -la" - try --> $a Ok find it's working
-	vim not working --> fixed now it's working
+   - << lim cat | echo hi (to test fach nsalli)
+   - EXPEND HEREDOC's TEXT ($)  (secondary)
+	\/EXIT STATUS  (between prima. & secondary)
+   - LEAKS   (primary)
+	\/NORMINETTE  (primary)
+  \/CHECK FOR OPEN FDS...  (last)
+   - HEREDOC IN CASE : << LIM CAT ==> 1/n 2/n 3/n ==> THE LIM OR CNTR+D (to ask a friend)
+   ++(second) -buil: or not a buil: cmd > $dskl should be ambiguous not fd error(prolly a problem in indicating that $dskl is an ambiguous file)
+   ++ (second) -export a="ls -la" - try --> $a Ok find it's working (permission denied)
+   ++(PERMISSION DENIED) in cmd { << lim ""};
+   - vim not working --> fixed now it's working
   *************************
+
+
+sig quit in one cmd
 

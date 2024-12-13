@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 09:53:36 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/13 15:40:59 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/13 22:40:03 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*remplac_str(char *data, int i, int count_quotes)
 	char	quote;
 
 	word = (char *)malloc(i - (count_quotes * 2) + 1);
+	printf("lenth is: %d\n", i - (count_quotes * 2) + 1);
 	if (!word)
 		return (NULL);
 	j = 0;

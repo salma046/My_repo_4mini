@@ -92,7 +92,7 @@ char				*remplace_doll_str(char *data, char *env_var);
 char				*after_dol_word(char *str, int l, int str_len);
 char				*rmp_dollar(char *tokens_word, t_token **tokens_list, int *i);
 char				*rmp_dollar2(char *t_word, int *i, int to_split,
-						t_token **tokens_list, int **is_ambiguous);
+						t_token **tokens_list, int *is_ambiguous);
 char				*token_edi_env(char *str, char *env_var,
 						t_token **tokens_list);
 int					is_space(char *line);
@@ -138,7 +138,7 @@ void				free_env_list(t_env *head);
 void				fre_the_tokens(t_token *tokens);
 char				*ft_getenv(char *key, t_env *envir);
 void				free_mystructs();
-
+void	handle_child(int sig);
 // functionts utils ✙:
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 int					ft_strcmp(char *s1, char *s2);

@@ -9,7 +9,7 @@ char *find_command_path(char *command, t_env *env)
     if (ft_strchr(command, '/') != NULL) 
     {
         if (access(command, X_OK) == 0)
-            return ft_strdup(command);
+            return (command);
         return NULL;
     }
 

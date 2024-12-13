@@ -43,7 +43,7 @@ void ft_exit(t_minishell *data)
 	{
         if (is_numeric(tmp_node->cmd[1])) {
         
-            data->exit_status = ft_atoi(tmp_node->cmd[1]) % 256; 
+            data->exit_status = ft_atoi(tmp_node->cmd[1]) % 256;
         } 
         else
         {

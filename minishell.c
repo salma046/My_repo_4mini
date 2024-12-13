@@ -63,14 +63,12 @@ int execution_main(t_minishell data)
 		pid = fork();
 		if (pid == 0)
 		{
-			signal(SIGINT, handle_sigint);
-			signal(SIGQUIT, handle_sigquit);
+			signal(SIGINT, handle_child);
+			signal(SIGQUIT, handle_child);
 			if (ft_check_builtins(temp_nodes->cmd[0]) != 1)
 			{
-				signal(SIGINT, handle_sigint);
-				signal(SIGQUIT, handle_sigquit);
 				char *command_path = find_command_path(temp_nodes->cmd[0], data.envir);
-				if (!command_path)
+				if (!command_path || !ft_strcmp(temp_nodes->cmd[0], ""))
 				{
 					fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
 					g_minishell.exit_status = 127;
@@ -86,7 +84,7 @@ int execution_main(t_minishell data)
 				free_mystructs();
 				perror("execve");
 				g_minishell.exit_status = 127;
-				// exit(g_minishell.exit_status);
+				exit(g_minishell.exit_status);
 			}
 		}
 		dup2(in_fd, 0);
@@ -95,22 +93,24 @@ int execution_main(t_minishell data)
 		close(in_fd2);
 		if (pid != 0)
 			g_minishell.exit_status = 127;
-		int	i;
 		int	st;
-		int	stt;
-		pid_t	id;
-		i = 0;
-		while(i < data.count_pips)
+		int sig;
+			waitpid(pid,&st,0);
+		if(WIFEXITED(st))
+			g_minishell.exit_status = WEXITSTATUS(st);
+		if (WIFSIGNALED(st))
 		{
-			id = waitpid(-1,&st,0);
-			if(id == -1)
-				break ;
-			if(id == pid)
+			sig = WTERMSIG(st);
+			if (sig == 2)
 			{
-				if(WIFEXITED(st))
-					stt = WEXITSTATUS(st);
+				printf("\n");
+				g_minishell.exit_status = 130;
 			}
-			i++;
+			if (sig == 3)
+			{
+				printf("Quit (core dumped)\n");
+				g_minishell.exit_status = 131;
+			}
 		}
 	}
 	else

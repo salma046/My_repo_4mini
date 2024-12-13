@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:24:05 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/13 17:38:50 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/14 00:17:53 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,14 +135,14 @@ char	*rmp_dollar(char *t_word, t_token **to_list, int *is_ambiguous)
 		else if (t_word[i] == '$' && ft_isalnum(t_word[i + 1]) == 0)
 			skip_if_isalnum(t_word, &i);
 		else if (t_word[i] == '$')
-			t_word = rmp_dollar2(t_word, &i, to_split, to_list, &is_ambiguous);
+			t_word = rmp_dollar2(t_word, &i, to_split, to_list, is_ambiguous);
 		else if (t_word[i])
 			i++;
 	}
 	return (remplace_exit_value(t_word));
 }
 
-char	*rmp_dollar2(char *t_word, int *i, int to_split, t_token **tokens_list, int **is_ambiguous)
+char	*rmp_dollar2(char *t_word, int *i, int to_split, t_token **tokens_list, int *is_ambiguous)
 {
 	char	*env_var;
 	char	*word;
@@ -158,9 +158,9 @@ char	*rmp_dollar2(char *t_word, int *i, int to_split, t_token **tokens_list, int
 		return (word);
 	}
 	if (!word || word[0] == '\0')
-		**is_ambiguous = 1;
+		*is_ambiguous = 1;
 	else
-		**is_ambiguous = 0;
+		*is_ambiguous = 0;
 	(*i) = 0;
 	return (word);
 }

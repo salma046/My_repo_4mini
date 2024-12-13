@@ -37,7 +37,7 @@ int	ft_start_heredoc_child(int fd, char *limiter, t_token *token)
 			if (!line)
 				line = ft_strdup("");
 		}
-		if (token->quotes_heredoc == 1)
+		if (token->quotes_heredoc == 0)
 		{
 			line = rmp_dollar(line, NULL, 0);
 		}

@@ -31,7 +31,7 @@ $USER$USER
 
   ************************
 // - << lim cat | echo hi (to test fach nsalli)
-// - EXPEND HEREDOC's TEXT ($)  (secondary) !!!!!! NOT YES FINISH drto blm9loob
+ - EXPEND HEREDOC's TEXT ($)  (secondary) !!!!!! NOT YES FINISH drto blm9loob
 	\/EXIT STATUS  (between prima. & secondary)
 // - LEAKS   (primary)
 	\/NORMINETTE  (primary)
@@ -41,8 +41,9 @@ $USER$USER
    ++ (second) -export a="ls -la" - try --> $a Ok find it's working (permission denied)
    ++(PERMISSION DENIED) in cmd { << lim ""};
 // - vim not working --> fixed now it's working
-   Jump condition in redirecions ls > a (leaks)
+   Jump condition in redirecions ls > a (leaks) (not important)
    a Not A Builtins cmd and a ctrl + C or + D
+   HANDLE execv permission denied errors ($HOME, "",)
   *************************
 
 

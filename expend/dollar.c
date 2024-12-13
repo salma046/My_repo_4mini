@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:50 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/13 17:40:05 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/13 22:49:13 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,9 @@ char	*remplace_doll_str(char *data, char *env_var)
 	char	*word;
 
 	if (env_var == NULL)
-		return (remp_with_null(data));
+		word = remp_with_null(data);
 	else
 		word = remp_with_value(data, env_var);
+	free(data);
 	return (word);
 }

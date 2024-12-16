@@ -7,9 +7,10 @@ int ft_input(char *file_name, t_node *node)
 	{
         g_minishell.exit_status = 1;
 		perror("fd");
+        g_minishell.exit_status =1;
 		return (-1);
 	}
-    return (0);
+	return (g_minishell.exit_status = 0);
 }
 
 int ft_output(char *file_name, t_node *node)
@@ -19,9 +20,10 @@ int ft_output(char *file_name, t_node *node)
 	{
         g_minishell.exit_status = 1;
 		perror("fd");
+        g_minishell.exit_status =1;
 		return (-1);
 	}
-    return (0);
+	return (g_minishell.exit_status = 0);
 }
 
 int ft_append(char *file_name, t_node *node)
@@ -31,7 +33,8 @@ int ft_append(char *file_name, t_node *node)
 	{
         g_minishell.exit_status = 1;
 		perror("fd");
+        g_minishell.exit_status =1;
 		return (-1);
 	}
-    return (0);
+	return (g_minishell.exit_status = 0);
 }

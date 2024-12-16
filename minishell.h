@@ -9,7 +9,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "get_next_line/get_next_line.h"
 # include "libft/libft.h"
 # include <errno.h>
 # include <limits.h>
@@ -80,7 +79,6 @@ typedef struct s_minishell
 
 extern t_minishell	g_minishell;
 
-void sigint_handler(int sig);
 char 				**mk_tenv_char(t_env *envir);
 char				*get_word(char *str, int i);
 char				*get_env_var(char *str, int i);
@@ -138,7 +136,6 @@ void				free_env_list(t_env *head);
 void				fre_the_tokens(t_token *tokens);
 char				*ft_getenv(char *key, t_env *envir);
 void				free_mystructs();
-void	handle_child(int sig);
 // functionts utils ✙:
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 int					ft_strcmp(char *s1, char *s2);
@@ -148,7 +145,7 @@ int					ft_cd(t_minishell *data);
 void				ft_pwd(t_node *node);
 void				ft_echo(t_node *node);
 void				ft_env(char **cmds, t_minishell *data);
-void				ft_exit(t_minishell *data);
+void				ft_exit(t_node *nodes);
 void				ft_unset(t_minishell *data);
 int					ft_export(t_minishell *data, t_env *expo_envir, t_env *env_envir);
 
@@ -167,15 +164,11 @@ void				remove_node(t_env** head, char *keyToRemove);
 void				search_check_add_env(t_env *expo_envir, t_env *env_envir);
 void				*mk_env_4expo(char **envir);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
-int					**mksome_files(int count_pipe);
-int					assign_files(t_minishell data, t_node *nodes);
-// void				ft_env_export_once(t_token *token, int active);
-// void			ft_add_to_export_arg(t_token *token);
 
 char    *find_command_path(char *command, t_env *env) ;
 // execute commands 🚀:
-int ft_execute(t_minishell data, t_node *nodes, char **env);
-
+int					ft_execute_one_cmd(t_minishell data);
+int					ft_execute_multi_cmd(t_minishell data);
 // redirectios 🔁:
 int					ft_input(char *file_name, t_node *node);
 int					ft_output(char *file_name, t_node *node);
@@ -185,17 +178,17 @@ int					main_heredoc(t_token *tokens);
 int					ft_heredoc(t_token *tokens);
 int					start_heredoc(int fd, char *limiter, t_token *token);
 int					ft_start_heredoc(int fd, char *limiter, t_token *token);
-void				free_fds(t_minishell data);
 
 // error 🚨:
 void				ft_error(char *msg);
 
 // leaks 💦:
-void				free_env_array(char **arr);
+// void				free_env_array(char **arr);
 // ctrl (sig)
 void	handle_quit(int sig);
 void	handle_sigint(int sig);
-void	handle_sigquit(int sig);
+void	handle_child(int sig);
+// void	sigint_handler(int sig);
 // void	handle_here_sigquit(int sig);
 
 #endif

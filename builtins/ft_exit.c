@@ -16,15 +16,10 @@ int is_numeric(const char *str) {
 }
 
 
-void ft_exit(t_minishell *data)
+void ft_exit(t_node *tmp_node)
 {
-	t_node	*tmp_node;
-	tmp_node = data->nodes;
-    if (!tmp_node || !tmp_node->cmd) {
-        printf("exit\n");
-        exit(0);
-    }
     int i = 0;
+
     while (tmp_node->cmd[i]) {
         i++;
     }
@@ -34,25 +29,26 @@ void ft_exit(t_minishell *data)
         {
             printf("bash: exit: %s: numeric argument required\n", tmp_node->cmd[1]);
 			free_mystructs();
-            exit(data->exit_status);
+            g_minishell.exit_status = 2;
+            exit(g_minishell.exit_status);
         }
-        data->exit_status = 2;
-        return ;  
+        g_minishell.exit_status = 2;
+        return ;
     }
     if (tmp_node->cmd[1])
 	{
         if (is_numeric(tmp_node->cmd[1])) {
         
-            data->exit_status = ft_atoi(tmp_node->cmd[1]) % 256;
+			g_minishell.exit_status = ft_atoi(tmp_node->cmd[1]) % 256;
         } 
         else
         {
-            printf("bash: exit: %s: numeric argument required\n", tmp_node->cmd[1]);
-            data->exit_status  = 2;
+			printf("bash: exit: %s: numeric argument required\n", tmp_node->cmd[1]);
+			g_minishell.exit_status  = 2;
 			free_mystructs();
-            exit(data->exit_status);
+			exit(g_minishell.exit_status);
         }
     }
 	free_mystructs();
-    exit(data->exit_status);
+    exit(g_minishell.exit_status);
 }

@@ -31,7 +31,7 @@ $USER$USER
 
   ************************
 // - << lim cat | echo hi (to test fach nsalli)
- - EXPEND HEREDOC's TEXT ($)  (secondary) !!!!!! NOT YES FINISH drto blm9loob
+//- EXPEND HEREDOC's TEXT ($)  (secondary) !!!!!! NOT YES FINISH drto blm9loob
 	\/EXIT STATUS  (between prima. & secondary)
 // - LEAKS   (primary)
 	\/NORMINETTE  (primary)
@@ -41,11 +41,28 @@ $USER$USER
    ++ (second) -export a="ls -la" - try --> $a Ok find it's working (permission denied)
    ++(PERMISSION DENIED) in cmd { << lim ""};
 // - vim not working --> fixed now it's working
-   Jump condition in redirecions ls > a (leaks) (not important)
-   a Not A Builtins cmd and a ctrl + C or + D
+   Jump condition in redirecions ls > a (leaks)
    HANDLE execv permission denied errors ($HOME, "",)
   *************************
 
 
-sig quit in one cmd
+  ********-----------******
+control + C in cmd(yes) --in single cmd and double cmd
+
+//heredoc expend limm--signalls in yes--free in allll the places
+the leak in a cmd with quotes // fixed
+
+> a exit lsls | echo hi (this should give numerical argument required).
+
+leaks when I do ->unset PATH
+Minishell~$ ls
+
+> i | cat (leaks)
+
+ls | > a (leaks)
+
+> $skdlf | echo hi | < minishell.c cat (ambiguous)
+
+//the exit problem: ls | exit (it start always by the first node) // done fixed
+  ********-----------******
 

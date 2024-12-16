@@ -12,10 +12,11 @@ int	ft_check_redirections(t_node *nodes)
 		tmp_redir = tmp_node->redir;
 		while (tmp_redir)
 		{
+			printf("the file is nameeed: %s \n", tmp_redir->file);
 			if (tmp_redir->is_ambiguous == 1)
 			{
 				write(2, str, ft_strlen(str));
-        		g_minishell.exit_status = 1;
+				g_minishell.exit_status = 1;
 				if (g_minishell.count_pips == 1 || !tmp_node->next_node)
 					return (-1);
 				else

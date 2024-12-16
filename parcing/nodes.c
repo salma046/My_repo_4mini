@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:59:29 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/14 00:09:16 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/15 22:29:16 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	fill_redi(enum e_token_type token_t, char *red_file,
 		return ;
 	new_redir->red_type = token_t;
 	new_redir->file = ft_strdup(red_file);
-	printf("i is : %d and file name is: %s\n", is_true, red_file);
 	if (is_true == 1)
 		new_redir->is_ambiguous = 1;
 	else
@@ -94,19 +93,20 @@ void	fill_commands(t_node **node_list, t_token *tokens)
 t_node	*mk_nodes(t_token *tokens)
 {
 	t_node	*nodes;
-	t_token	*current;
+	// t_token	*current;
 	// t_token	*next;
 
 	nodes = NULL;
-	current = tokens;
-	t_token *tmmp = tokens;
-	while (tmmp)
-	{
-		printf(("***********\n"));
-		printf("the token is : %s and ambigu is: %d\n", tmmp->data, tmmp->is_ambiguous);
-		printf(("***********\n"));
-		tmmp = tmmp->next_token;
-	}
+	// current = tokens;
+	// t_token *tmmp = tokens;
+	// while (tmmp)
+	// {
+	// 	printf(("***********\n"));
+	// 	printf("the token is : %s and ambigu is: %d\n", tmmp->data, tmmp->is_ambiguous);
+	// 	printf(("***********\n"));
+	// 	tmmp = tmmp->next_token;
+	// }
 	fill_commands(&nodes, tokens);
+	g_minishell.count_pips = count_pipe(g_minishell.nodes);
 	return (nodes);
 }

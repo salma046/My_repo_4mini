@@ -49,8 +49,8 @@ int	execute_the_builtin(t_minishell *data, t_node *nodes, char **cmd)
 	}
 	if (!ft_strcmp(cmd[0], "exit"))
 	{
-		printf("This is builtin: export\n");
-		ft_exit(data);
+		printf("This is builtin: exit\n");
+		ft_exit(nodes);
 	}
 	if (!ft_strcmp(cmd[0], "export"))
 	{

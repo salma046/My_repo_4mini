@@ -30,7 +30,6 @@ void	handle_child(int sig)
 // 	exit(g_minishell.exit_status);
 // }
 
-
 void	handle_quit(int sig)
 {
 	(void)sig;

@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:59:24 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/03 23:00:07 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/16 11:45:19 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,5 @@ int	count_pipe(t_node *nodes)
 		count++;
 		temp_node = temp_node->next_node;
 	}
-	// count++;
 	return (count);
 }

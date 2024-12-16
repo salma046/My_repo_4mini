@@ -15,6 +15,8 @@ void	remove_node(t_env **head, char *keyToRemove)
 				*head = current->next;
 			else
 				prev->next = current->next;
+			free(current->key);
+			free(current->value);
 			free(current);
 			return ;
 		}
@@ -23,7 +25,6 @@ void	remove_node(t_env **head, char *keyToRemove)
 	}
 }
 
-// You need to free it .
 t_env	*ft_env_unset(t_minishell *data)
 {
 	t_env	*tmp;
@@ -65,7 +66,6 @@ t_env	*ft_env_unset_for_export(t_minishell *data)
 	{
 		test = temp_tokens->data;
 		tmp = data->export_env;
-		printf("the test word is: %s\n", test);
 		while (tmp)
 		{
 			if (tmp->next != NULL && !ft_strcmp(test, tmp->next->key))
@@ -83,4 +83,5 @@ void	ft_unset(t_minishell *data)
 {
 	data->envir = ft_env_unset(data);
 	data->export_env = ft_env_unset_for_export(data);
+	g_minishell.exit_status = 0;
 }

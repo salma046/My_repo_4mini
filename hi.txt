@@ -28,6 +28,7 @@ $USER$USER
 	// resent test fih loop infinite(les deux) croissant
 
 
+////******ls | exit 66 23 dsl*****\\\\\
 
   ************************
 // - << lim cat | echo hi (to test fach nsalli)
@@ -37,7 +38,7 @@ $USER$USER
 	\/NORMINETTE  (primary)
   \/CHECK FOR OPEN FDS...  (last)
 // - HEREDOC IN CASE : << LIM CAT ==> 1/n 2/n 3/n ==> THE LIM OR CNTR+D (to ask a friend)
-   ++(second) -buil: or not a buil: cmd > $dskl should be ambiguous not fd error(prolly a problem in indicating that $dskl is an ambiguous file)
+   ++(second) -buil: or not a buil: cmd > $dskl should be ambiguous not fd error(prolly a problem in indicating that $dskl is an ambiguous file)  > $dl > bb | cat | echo hi > b
    ++ (second) -export a="ls -la" - try --> $a Ok find it's working (permission denied)
    ++(PERMISSION DENIED) in cmd { << lim ""};
 // - vim not working --> fixed now it's working
@@ -47,22 +48,38 @@ $USER$USER
 
 
   ********-----------******
-control + C in cmd(yes) --in single cmd and double cmd
-
 //heredoc expend limm--signalls in yes--free in allll the places
 the leak in a cmd with quotes // fixed
 
-> a exit lsls | echo hi (this should give numerical argument required).
+control + C in cmd(yes) --in single cmd and double cmd ---------------------
 
-leaks when I do ->unset PATH
-Minishell~$ ls
+> a exit lsls | echo hi (this should give numerical argument required). // fixed
 
-> i | cat (leaks)
+leaks when I do ->unset PATH//
+Minishell~$ ls /////////////// fixed
 
-ls | > a (leaks)
+> i | cat (leaks) /// fixed
+
+ls | > a (leaks) /// fixed
 
 > $skdlf | echo hi | < minishell.c cat (ambiguous)
 
 //the exit problem: ls | exit (it start always by the first node) // done fixed
+
+the permission denied problemmm
+
+./minishell   ./minishell ctrl+C ctrl+C-----------------------------
   ********-----------******
 
+
+
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+PARCING done
+BUILTINS done
+EXECUTION
+EXPEND
+REDIRECTIONS
+UTILSS
+
+
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN

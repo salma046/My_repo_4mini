@@ -6,19 +6,18 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 09:53:36 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/15 00:19:18 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/16 11:31:44 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*remplac_str(char *data, int i, int count_quotes)
+char	*remplac_str(char *data, int i, int j)
 {
-	int		j;
 	char	*word;
 	char	quote;
 
-	word = (char *)malloc(i - (count_quotes * 2) + 1);
+	word = (char *)malloc(i - (j * 2) + 1);
 	if (!word)
 		return (NULL);
 	j = 0;
@@ -80,12 +79,14 @@ t_token	*rm_qotes(t_token *tokens)
 			n_quotes = count_quotes(temp_tokens->data, &len);
 			if (n_quotes)
 			{
-				if (temp_tokens->prev_token && temp_tokens->prev_token->data_type == 2)
+				if (temp_tokens->prev_token
+					&& temp_tokens->prev_token->data_type == 2)
 					temp_tokens->quotes_heredoc = 1;
 				temp_tokens->data = remplac_str(temp_tokens->data,
 						len, n_quotes);
 			}
-			else if(!n_quotes && temp_tokens->prev_token && temp_tokens->prev_token->data_type == 2)
+			else if (!n_quotes && temp_tokens->prev_token
+				&& temp_tokens->prev_token->data_type == 2)
 				temp_tokens->quotes_heredoc = 0;
 		}
 		temp_tokens = temp_tokens->next_token;

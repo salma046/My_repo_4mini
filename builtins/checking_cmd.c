@@ -20,51 +20,29 @@ int	ft_check_builtins(char *command)
 		return (1);
 	return (0);
 }
+
 int	execute_the_builtin(t_minishell *data, t_node *nodes, char **cmd)
 {
 	if (!ft_strcmp(cmd[0], "env"))
-	{
-		printf("This is builtin: env\n");
-		ft_env(nodes->cmd, data);
-	}
-	if (!ft_strcmp(cmd[0] , "unset"))
-	{
-		printf("This is builtin: unset\n");
+		return (ft_env(nodes->cmd, data));
+	if (!ft_strcmp(cmd[0], "unset"))
 		ft_unset(data);
-	}
 	if (!ft_strcmp(cmd[0], "echo"))
-	{
-		printf("This is builtin: echo\n");
 		ft_echo(nodes);
-	}
 	if (!ft_strcmp(cmd[0], "cd"))
-	{
-		printf("This is builtin: cd\n");
 		ft_cd(data);
-	}
 	if (!ft_strcmp(cmd[0], "pwd"))
-	{
-		printf("This is builtin: pwd\n");
 		ft_pwd(nodes);
-	}
 	if (!ft_strcmp(cmd[0], "exit"))
-	{
-		printf("This is builtin: exit\n");
 		ft_exit(nodes);
-	}
 	if (!ft_strcmp(cmd[0], "export"))
-	{
-		printf("This is builtin: export\n");
 		return (ft_export(data, data->export_env, data->envir));
-	}
-	return (0);
+	return (g_minishell.exit_status);
 }
 
 int	check_command(t_minishell *data, t_node *node)
 {
 	int	pid;
-
-	// printf("hi from builtins!!\n");
 
 	if (data->count_pips == 1)
 	{
@@ -80,14 +58,11 @@ int	check_command(t_minishell *data, t_node *node)
 		}
 		else if (pid == 0)
 		{
-			// sigint
-			// sigquit
 			execute_the_builtin(data, node, node->cmd);
 			free_mystructs();
-			exit(0); //Child proccess;;; // save the return exit status to be put on the $?
+			printf("hello world exit status is: %d\n", g_minishell.exit_status);
+			exit(g_minishell.exit_status);
 		}
 	}
-	return (0);
-	// and then in the end save the exit staus here 
-	// execute_the_builtin; // Already done
+	return (g_minishell.exit_status);
 }

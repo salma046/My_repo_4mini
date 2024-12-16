@@ -2,15 +2,21 @@
 
 t_minishell	g_minishell;
 
-int execution_main(t_minishell data)
+int	execution_main(t_minishell data)
 {
-    t_node *temp_nodes = data.nodes;
-    // int pipe_fd[2] = {-1, -1};
-    int in_fd = dup(STDOUT_FILENO);
-    // int in_fd2 = dup(STDOUT_FILENO);
-    pid_t pid;
+	t_node	*temp_nodes;
+	int		in_fd;
+	pid_t	pid;
+		int i;
+		int st;
+		int sig;
+		pid_t id;
 
-	if (temp_nodes->redir && ft_check_redirections(temp_nodes) )
+	temp_nodes = data.nodes;
+	// int pipe_fd[2] = {-1, -1};
+	in_fd = dup(STDOUT_FILENO);
+	// int in_fd2 = dup(STDOUT_FILENO);
+	if (temp_nodes->redir && ft_check_redirections(temp_nodes))
 		return (-1);
 	if (data.count_pips == 1)
 	{
@@ -19,21 +25,17 @@ int execution_main(t_minishell data)
 	else
 	{
 		pid = ft_execute_multi_cmd(data);
-		dup2(in_fd,0);
+		dup2(in_fd, 0);
 		close(in_fd);
-		int	i;
-		int	st;
-		int sig;
-		pid_t	id;
 		i = 0;
-		while(i < data.count_pips)
+		while (i < data.count_pips)
 		{
-			id = waitpid(-1,&st,0);
-			if(id == -1)
+			id = waitpid(-1, &st, 0);
+			if (id == -1)
 				break ;
-			if(id == pid)
+			if (id == pid)
 			{
-				if(WIFEXITED(st))
+				if (WIFEXITED(st))
 					g_minishell.exit_status = WEXITSTATUS(st);
 				if (WIFSIGNALED(st))
 				{
@@ -53,19 +55,20 @@ int execution_main(t_minishell data)
 			i++;
 		}
 	}
-    return 0;
+	return (0);
 }
 
 void	init_data(char **env)
 {
 	g_minishell.exit_status = 0;
 	g_minishell.envirement = env;
+	g_minishell.is_ambiguous = 0;
 	g_minishell.envir = mk_env(g_minishell.envirement);
 	g_minishell.export_env = mk_env_4expo(g_minishell.envirement);
 	g_minishell.exit_status = 0;
 }
 
-void	parent_signals()
+void	parent_signals(void)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
@@ -103,7 +106,7 @@ int	main(int ac, char *av[], char **env)
 		if (!g_minishell.command)
 			free_structs(1);
 		if (g_minishell.command[0] == '\0')
-			continue;
+			continue ;
 		add_history(g_minishell.command);
 		g_minishell.tokens = ft_tokenize(g_minishell);
 		if (!g_minishell.tokens)
@@ -118,4 +121,3 @@ int	main(int ac, char *av[], char **env)
 		free_structs(2);
 	}
 }
-

@@ -78,4 +78,3 @@ void	ft_lstadd_back_token(t_token **lst, t_token *new)
 	arrs->next_token = new;
 	new->prev_token = arrs;
 }
-

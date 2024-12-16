@@ -1,6 +1,24 @@
 #include "../minishell.h"
 
+char	*put_quot2_value(char *str)
+{
+	char	*result;
+	int		i;
+	int		j;
 
+	i = 0;
+	j = 0;
+	result = malloc(sizeof(char) * ft_strlen(str) + 3);
+	if (!result)
+		return (NULL);
+	result[j++] = '"';
+	while (str[i])
+		result[j++] = str[i++];
+	result[j] = '"';
+	result[++j] = '\0';
+	free(str);
+	return (result);
+}
 
 t_env	*make_new_expor(char *envir)
 {
@@ -15,7 +33,7 @@ t_env	*make_new_expor(char *envir)
 	{
 		cmd_env->key = ft_strndup(envir, equal_env - envir);
 		cmd_env->value = put_quot2_value(ft_strndup(equal_env + 1,
-					ft_strlen(envir + 1)));
+													ft_strlen(envir + 1)));
 		cmd_env->next = NULL;
 	}
 	return (cmd_env);
@@ -44,3 +62,26 @@ void	*mk_env_4expo(char **envir)
 	return (head);
 }
 
+char	*rm_quot2_value(char *str)
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		str_len;
+
+	i = 1;
+	j = 0;
+	str_len = ft_strlen(str);
+	if (str_len < 2)
+	{
+		free(str);
+		return (ft_strdup(""));
+	}
+	result = malloc(sizeof(char) * str_len - 1);
+	if (!result)
+		return (NULL);
+	ft_strncpy(result, str + 1, str_len - 2);
+	result[str_len - 2] = '\0';
+	free(str);
+	return (result);
+}

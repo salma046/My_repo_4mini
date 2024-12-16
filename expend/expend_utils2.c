@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:46:11 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/09 11:44:02 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/16 16:26:21 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,48 +98,4 @@ int	count_env(t_env *envir)
 		count++;
 	}
 	return (count);
-}
-
-char	*ft_getenv(char *key, t_env *envir)
-{
-	t_env *tmp;
-
-	tmp = envir;
-	while(tmp)
-	{
-		if (!strcmp(key, tmp->key))
-		{
-			return (tmp->value);
-		}
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
-char	*get_env_var(char *str, int i)
-{
-	char	*env_var;
-	char	*env_value;
-	int		j;
-	int		temp;
-
-	i++;
-	temp = 0;
-	j = i;
-	while (str[i] == '$')
-		i++;
-	while (check_is_num(str, i) == 1)
-		i++;
-	env_var = (char *)malloc(i - j + 1);
-	if (!env_var)
-		return (NULL);
-	while (j < i)
-		env_var[temp++] = str[j++];
-	env_var[temp] = '\0';
-	env_value = ft_getenv(env_var, g_minishell.envir);
-	free(env_var);
-	if (env_value)
-		return (env_value);
-	else
-		return (NULL);
 }

@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	free_mystructs2()
+void	free_mystructs2(void)
 {
 	fre_the_tokens(g_minishell.tokens);
 	free_env_list(g_minishell.envir);
@@ -30,7 +30,7 @@ int	ft_start_heredoc_child(int fd, char *limiter, t_token *token)
 			&& (ft_strlen(line) == ft_strlen(limiter)))
 		{
 			free_mystructs2();
-			exit (g_minishell.exit_status = 0);
+			exit(g_minishell.exit_status = 0);
 		}
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)))
 		{
@@ -54,8 +54,8 @@ int	ft_start_heredoc_child(int fd, char *limiter, t_token *token)
 
 int	ft_start_heredoc(int fd, char *limiter, t_token *token)
 {
-	pid_t pid;
-	int status;
+	pid_t	pid;
+	int		status;
 
 	pid = fork();
 	signal(SIGINT, SIG_IGN);

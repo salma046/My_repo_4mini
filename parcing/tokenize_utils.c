@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/16 12:02:20 by salaoui           #+#    #+#             */
+/*   Updated: 2024/12/16 12:20:01 by salaoui          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	token_new_sep(enum e_token_type token_t, t_token **tokens_list)
@@ -14,7 +26,7 @@ void	token_new_sep(enum e_token_type token_t, t_token **tokens_list)
 }
 
 void	ft_put_token(char **line, enum e_token_type token_t,
-		t_token **tokens_list)
+		t_token **tokens_list, int *heredoc)
 {
 	if (token_t == APPEND)
 	{
@@ -25,6 +37,7 @@ void	ft_put_token(char **line, enum e_token_type token_t,
 	{
 		token_new_sep(HER_DOC, tokens_list);
 		(*line)++;
+		(*heredoc) = 1;
 	}
 	else
 		token_new_sep(token_t, tokens_list);
@@ -59,7 +72,7 @@ void	token_new_word(char *word, enum e_token_type token_t,
 
 int	find_quote(char c, char **line, int *i)
 {
-	char quote;
+	char	quote;
 
 	(*line)++;
 	(*i)++;
@@ -74,39 +87,30 @@ int	find_quote(char c, char **line, int *i)
 	return (0);
 }
 
-int	ft_put_word_token(char **line, enum e_token_type token_t,
-		t_token **tokens_list, int heredoc)
+int	process_word_segment(char **line, int *i)
 {
-	(void)token_t;
-	char	*word;
-	char	*new_word;
 	char	quote;
-	int		i;
 
-	word = *line;
-	i = 0;
-	while (**line != '\0' && ft_strncmp(*line, ">", 1) != 0 && ft_strncmp(*line, "<", 1) != 0 && ft_strncmp(*line, "|", 1) != 0 && is_space(*line) == 0)
+	while (**line != '\0' && ft_strncmp(*line, ">", 1) != 0
+		&& ft_strncmp(*line, "<", 1) != 0
+		&& ft_strncmp(*line, "|", 1) != 0 && is_space(*line) == 0)
 	{
 		if (**line == '&')
 		{
-			printf("syntkax error\n");
+			printf("syntax error\n");
 			return (0);
 		}
 		if (**line == '"' || **line == '\'')
 		{
 			quote = **line;
-			if (find_quote(**line, line, &i) == 0)
+			if (find_quote(**line, line, i) == 0)
 			{
 				printf("syntax error missing %c\n", quote);
 				return (0);
 			}
 		}
-		i++;
+		(*i)++;
 		(*line)++;
 	}
-	new_word = get_word(word, i);
-	while (is_space(*line) == 1)
-		(*line)++;
-	token_new_word(new_word, WORD, tokens_list, heredoc);
-	return (i);
+	return (1);
 }

@@ -11,7 +11,8 @@ int	just_open_files(t_node *node)
 
 void	dup_my_files(t_node *temp_nodes)
 {
-	if (temp_nodes->redir->red_type == OUT_REDIR || temp_nodes->redir->red_type == APPEND)
+	if (temp_nodes->redir->red_type == OUT_REDIR
+		|| temp_nodes->redir->red_type == APPEND)
 	{
 		dup2(temp_nodes->out_file, STDOUT_FILENO);
 		close(temp_nodes->out_file);
@@ -31,7 +32,8 @@ void	dup2_mystd_files(int in_fd, int in_fd2)
 	close(in_fd2);
 }
 
-int	check_my_builtin(t_minishell data, t_node *temp_nodes, int in_fd, int in_fd2)
+int	check_my_builtin(t_minishell data, t_node *temp_nodes, int in_fd,
+		int in_fd2)
 {
 	if (data.nodes->cmd[0] && !strcmp(data.nodes->cmd[0], "exit"))
 	{
@@ -46,29 +48,29 @@ int	check_my_builtin(t_minishell data, t_node *temp_nodes, int in_fd, int in_fd2
 	}
 	else
 	{
-		check_command(&data, temp_nodes);
+		g_minishell.exit_status = check_command(&data, temp_nodes);
 		dup2_mystd_files(in_fd, in_fd2);
-		return (g_minishell.exit_status = 1);
+		return (g_minishell.exit_status);
 	}
 }
 
-void	check_my_execute(t_minishell data, t_node *temp_nodes, int in_fd, int in_fd2)
+void	check_my_execute(t_minishell data, t_node *temp_nodes, int in_fd,
+		int in_fd2)
 {
-	char *command_path;
+	char	*command_path;
 
 	signal(SIGINT, handle_child);
 	signal(SIGQUIT, handle_child);
 	if (ft_check_builtins(temp_nodes->cmd[0]) != 1)
 	{
 		command_path = find_command_path(temp_nodes->cmd[0], data.envir);
-		if (!command_path || !ft_strcmp(temp_nodes->cmd[0], ""))
+		if (!command_path)
 		{
 			fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
-			g_minishell.exit_status = 127;
 			free_mystructs();
 			free(command_path);
 			dup2_mystd_files(in_fd, in_fd2);
-			exit(g_minishell.exit_status);
+			exit(g_minishell.exit_status = 127);
 		}
 		execve(command_path, temp_nodes->cmd, data.envirement);
 		free_mystructs();
@@ -81,10 +83,10 @@ void	check_my_execute(t_minishell data, t_node *temp_nodes, int in_fd, int in_fd
 void	signals_pid(pid_t pid)
 {
 	int	st;
-	int sig;
+	int	sig;
 
-		waitpid(pid,&st,0);
-	if(WIFEXITED(st))
+	waitpid(pid, &st, 0);
+	if (WIFEXITED(st))
 		g_minishell.exit_status = WEXITSTATUS(st);
 	if (WIFSIGNALED(st))
 	{
@@ -102,13 +104,15 @@ void	signals_pid(pid_t pid)
 	}
 }
 
-int ft_execute_one_cmd(t_minishell data) 
+int	ft_execute_one_cmd(t_minishell data)
 {
-    t_node *temp_nodes;
-	int in_fd = dup(STDOUT_FILENO);
-	int in_fd2 = dup(STDOUT_FILENO);
-	pid_t pid;
+	t_node	*temp_nodes;
+	int		in_fd;
+	int		in_fd2;
+	pid_t	pid;
 
+	in_fd = dup(STDOUT_FILENO);
+	in_fd2 = dup(STDOUT_FILENO);
 	temp_nodes = data.nodes;
 	if (data.nodes->cmd[0] == NULL)
 		return (just_open_files(temp_nodes));
@@ -142,19 +146,23 @@ void	part_one(int *pipe_fd, t_node *temp_nodes, int in_fd)
 	}
 }
 
-int	ft_execute_multi_cmd(t_minishell data) 
+int	ft_execute_multi_cmd(t_minishell data)
 {
-    t_node *temp_nodes;
-    int pipe_fd[2] = {-1, -1};
-	int in_fd = dup(STDOUT_FILENO);
-	pid_t pid;
+	t_node	*temp_nodes;
+	int		pipe_fd[2];
+	int		in_fd;
+	pid_t	pid;
+	char	*command_path;
 
+	pipe_fd[0] = -1;
+	pipe_fd[1] = -1;
+	in_fd = dup(STDOUT_FILENO);
 	temp_nodes = data.nodes;
 	while (temp_nodes)
 	{
 		pipe(pipe_fd);
 		pid = fork();
-		if (pid == 0) 
+		if (pid == 0)
 		{
 			signal(SIGINT, handle_child);
 			signal(SIGQUIT, handle_child);
@@ -165,17 +173,21 @@ int	ft_execute_multi_cmd(t_minishell data)
 			{
 				check_command(&data, temp_nodes);
 				free_mystructs();
-				exit(EXIT_SUCCESS);
+				exit(g_minishell.exit_status);
+				printf("minishell exit status is: %d\n",
+						g_minishell.exit_status);
 			}
 			else
 			{
-				char *command_path = find_command_path(temp_nodes->cmd[0], data.envir);
+				command_path = find_command_path(temp_nodes->cmd[0],
+													data.envir);
 				if (!command_path)
 				{
-					fprintf(stderr, "%s: command not found\n", temp_nodes->cmd[0]);
+					fprintf(stderr, "%s: command not found\n",
+							temp_nodes->cmd[0]);
 					free(command_path);
 					free_mystructs();
-					exit(127);
+					exit(g_minishell.exit_status = 127);
 				}
 				execve(command_path, temp_nodes->cmd, data.envirement);
 				perror("execve");
@@ -184,7 +196,7 @@ int	ft_execute_multi_cmd(t_minishell data)
 			}
 		}
 		temp_nodes = temp_nodes->next_node;
-		dup2(pipe_fd[0],STDIN_FILENO);
+		dup2(pipe_fd[0], STDIN_FILENO);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 	}

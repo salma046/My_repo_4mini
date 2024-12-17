@@ -78,3 +78,12 @@ void	ft_lstadd_back_token(t_token **lst, t_token *new)
 	arrs->next_token = new;
 	new->prev_token = arrs;
 }
+
+void	skip_if_isalnum(char *tokens_word, int *i)
+{
+	if (tokens_word[*i] == '$')
+		(*i)++;
+	while (tokens_word[*i] && tokens_word[*i] != '"' && tokens_word[*i] != '\''
+		&& tokens_word[*i] != '$')
+		(*i)++;
+}

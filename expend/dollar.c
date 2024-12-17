@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:50 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/13 22:49:13 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/17 18:41:24 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,20 @@ char	*remplace_doll_str(char *data, char *env_var)
 		word = remp_with_value(data, env_var);
 	free(data);
 	return (word);
+}
+
+char	*ft_getenv(char *key, t_env *envir)
+{
+	t_env	*tmp;
+
+	tmp = envir;
+	while (tmp)
+	{
+		if (!strcmp(key, tmp->key))
+		{
+			return (tmp->value);
+		}
+		tmp = tmp->next;
+	}
+	return (NULL);
 }

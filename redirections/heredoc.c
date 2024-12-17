@@ -1,56 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 09:05:12 by salaoui           #+#    #+#             */
+/*   Updated: 2024/12/17 09:28:16 by salaoui          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
-
-void	free_mystructs2(void)
-{
-	fre_the_tokens(g_minishell.tokens);
-	free_env_list(g_minishell.envir);
-	free_env_list(g_minishell.export_env);
-	// free_node_list(g_minishell.nodes);
-}
-
-void	sig_here_doc(int signal)
-{
-	(void)signal;
-	close(g_minishell.exit_status);
-	write(1, "\n", 1);
-	g_minishell.exit_status = 130;
-	free_mystructs2();
-	exit(g_minishell.exit_status);
-}
-
-int	ft_start_heredoc_child(int fd, char *limiter, t_token *token)
-{
-	char	*line;
-
-	signal(SIGINT, sig_here_doc);
-	line = readline("heredoc>");
-	while (line)
-	{
-		if (!ft_strncmp(line, limiter, ft_strlen(limiter))
-			&& (ft_strlen(line) == ft_strlen(limiter)))
-		{
-			free_mystructs2();
-			exit(g_minishell.exit_status = 0);
-		}
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)))
-		{
-			if (!line)
-				line = ft_strdup("");
-		}
-		if (token->quotes_heredoc == 0)
-		{
-			line = rmp_dollar(line, NULL, 0);
-		}
-		ft_putendl_fd(line, fd);
-		if (strcmp(line, limiter))
-			free(line);
-		line = readline("heredoc>");
-	}
-	printf("missing limiter\n");
-	close(fd);
-	free_mystructs2();
-	exit(g_minishell.exit_status);
-}
 
 int	ft_start_heredoc(int fd, char *limiter, t_token *token)
 {
@@ -102,7 +62,6 @@ int	ft_heredoc(t_token *tokens)
 		start_heredoc(fd, limiter, tokens->next_token);
 		if (g_minishell.exit_status == 130)
 		{
-			fprintf(stderr, "Hello World\n");
 			unlink(file);
 			return (-1);
 		}

@@ -60,7 +60,6 @@ int	check_command(t_minishell *data, t_node *node)
 		{
 			execute_the_builtin(data, node, node->cmd);
 			free_mystructs();
-			printf("hello world exit status is: %d\n", g_minishell.exit_status);
 			exit(g_minishell.exit_status);
 		}
 	}

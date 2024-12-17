@@ -6,14 +6,14 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:24:05 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/16 16:28:36 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/17 18:45:27 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 void	token_new_edi_word(char *word, enum e_token_type token_t,
-		t_token **tokens_list, int i)
+		t_token **tokens_list)
 {
 	t_token	*new_token;
 
@@ -23,7 +23,7 @@ void	token_new_edi_word(char *word, enum e_token_type token_t,
 	new_token->data = word;
 	new_token->data_type = token_t;
 	new_token->next_token = NULL;
-	new_token->is_ambiguous = i;
+	new_token->is_ambiguous = 1;
 	ft_lstadd_back_token(tokens_list, new_token);
 }
 
@@ -95,3 +95,23 @@ char	*get_env_var(char *str, int i)
 		return (NULL);
 }
 
+char	*rmp_dollar2(char *t_word, int *i, int to_split,
+	t_token **tokens_list)
+{
+	char	*env_var;
+	char	*word;
+
+	env_var = NULL;
+	env_var = get_env_var(t_word, *i);
+	if (env_var != NULL && check_4_space(env_var) == 1
+		&& to_split < 0 && tokens_list)
+		word = token_edi_env(t_word, env_var, tokens_list);
+	else
+		word = remplace_doll_str(t_word, env_var);
+	if (!tokens_list)
+	{
+		return (word);
+	}
+	(*i) = 0;
+	return (word);
+}

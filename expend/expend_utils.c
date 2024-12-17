@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:53 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/14 22:59:48 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/17 18:49:45 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*remp_with_edi_value(char *str, char *env_var);
 int		get_l(char *str, char *env_var);
 
-char	*token_edi_env(char *str, char *env_var, t_token **token_list)
+char	*token_edi_env(char *str, char *env_var, t_token **to_list)
 {
 	int		i;
 	char	*last_word;
@@ -26,19 +26,21 @@ char	*token_edi_env(char *str, char *env_var, t_token **token_list)
 	i = 0;
 	modif_part = fill_first_part(env_var, &i);
 	command_rest = after_dol_word(str, get_l(str, env_var), ft_strlen(str));
-	token_new_edi_word(remp_with_edi_value(str, modif_part), WORD, token_list, 1);
+	token_new_edi_word(remp_with_edi_value(str, modif_part), WORD, to_list);
 	free(modif_part);
 	while (env_var[i] != '\0')
 	{
 		middle_part = fill_middle_part(env_var, &i);
 		if (env_var[i] != '\0')
-			token_new_edi_word(middle_part, WORD, token_list, 0);
+			token_new_edi_word(middle_part, WORD, to_list);
 		else
 		{
 			last_word = ft_strjoin(middle_part, command_rest);
 			free(middle_part);
 		}
 	}
+	free(str);
+	free(command_rest);
 	return (last_word);
 }
 

@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:58:15 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/14 11:56:47 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/17 10:20:18 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,3 @@ char	*ft_join_words(char *word, char *str, int l)
 	free(word);
 	return (hi);
 }
-

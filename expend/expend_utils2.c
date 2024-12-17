@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:46:11 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/16 16:26:21 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/17 18:48:38 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,6 @@ void	skip_double_quo(char *tokens_word, int *to_split, int *i)
 	}
 	t = 0;
 	if (tokens_word[*i] == '"')
-		(*i)++;
-}
-
-void	skip_if_isalnum(char *tokens_word, int *i)
-{
-	if (tokens_word[*i] == '$')
-		(*i)++;
-	while (tokens_word[*i] && tokens_word[*i] != '"' && tokens_word[*i] != '\''
-		&& tokens_word[*i] != '$')
 		(*i)++;
 }
 

@@ -6,7 +6,7 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:59:29 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/16 11:42:51 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/17 18:37:07 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	fill_node(t_token *temp_tokens, t_node **node_list)
 	{
 		if (tokens->data_type != PIPE && tokens->data_type != WORD)
 		{
-			fill_redi(tokens->data_type, tokens->next_token->data, &redir,
-				temp_tokens->next_token->is_ambiguous);
+			fill_redi(tokens->data_type, tokens->next_token->data,
+				&redir, tokens->is_ambiguous);
 			tokens = tokens->next_token;
 		}
 		else

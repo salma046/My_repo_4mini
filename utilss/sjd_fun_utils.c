@@ -33,7 +33,7 @@ t_env	*make_new_expor(char *envir)
 	{
 		cmd_env->key = ft_strndup(envir, equal_env - envir);
 		cmd_env->value = put_quot2_value(ft_strndup(equal_env + 1,
-													ft_strlen(envir + 1)));
+					ft_strlen(envir + 1)));
 		cmd_env->next = NULL;
 	}
 	return (cmd_env);
@@ -84,4 +84,24 @@ char	*rm_quot2_value(char *str)
 	result[str_len - 2] = '\0';
 	free(str);
 	return (result);
+}
+
+void	search_check_add_env(t_env *expo_envir, t_env *env_envir)
+{
+	t_env	*to_check;
+
+	to_check = expo_envir;
+	while (to_check)
+	{
+		if (to_check->value == NULL)
+		{
+			to_check = to_check->next;
+			continue ;
+		}
+		else if (check_key(to_check->key, env_envir) != 1)
+		{
+			add_struc_2_env(to_check, env_envir);
+		}
+		to_check = to_check->next;
+	}
 }

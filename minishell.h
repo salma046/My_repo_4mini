@@ -31,14 +31,14 @@ typedef enum e_token_type
 	OUT_REDIR,
 	APPEND,
 	INP_REDIR
-}					token_type;
+}					t_token_type;
 
 typedef struct s_token
 {
 	int				is_ambiguous;
 	int				quotes_heredoc;
 	char			*data;
-	token_type		data_type;
+	t_token_type		data_type;
 	struct s_token	*next_token;
 	struct s_token	*prev_token;
 	char			**envirement;
@@ -46,7 +46,7 @@ typedef struct s_token
 
 typedef struct s_redir
 {
-	token_type		red_type;
+	t_token_type		red_type;
 	char			*file;
 	int				is_ambiguous;
 	struct s_redir	*next;
@@ -58,6 +58,7 @@ typedef struct s_node
 	t_redir			*redir;
 	int				out_file;
 	int				in_file;
+	int				is_ambiguous;
 	struct s_node	*next_node;
 	struct s_node	*prev_node;
 }					t_node;
@@ -69,7 +70,7 @@ typedef struct s_minishell
 	int				count_pips;
 	int				exit_status;
 	int				**files;
-	int				is_ambiguous;
+	// int				is_ambiguous;
 	pid_t			g_pid;
 	t_env			*envir;
 	t_env			*export_env;
@@ -88,14 +89,12 @@ char				*allocate_4_nword(char *str, char *env_var);
 char				*ft_join_words(char *word, char *str, int l);
 char				*remplace_doll_str(char *data, char *env_var);
 char				*after_dol_word(char *str, int l, int str_len);
-char				*rmp_dollar(char *tokens_word, t_token **tokens_list,
-						int *i);
+char				*rmp_dollar(char *tokens_word, t_token **tokens_list);
 char				*rmp_dollar2(char *t_word, int *i, int to_split,
-						t_token **tokens_list, int *is_ambiguous);
+						t_token **tokens_list);
 char				*token_edi_env(char *str, char *env_var,
 						t_token **tokens_list);
 int					is_space(char *line);
-int					is_not_alpanum(char c);
 int					cmd_count(t_token *tokens);
 int					count_pipe(t_node *nodes);
 int					check_4_space(char *env_var);
@@ -110,6 +109,7 @@ int					ft_put_word_token(char **line, enum e_token_type token_t,
 						t_token **tokens_list, int heredoc);
 void				free_node(t_node *node);
 void				free_redir_list(t_redir *redir);
+char				*free_arr(char **arr, int i);
 void				free_node_list(t_node *node_list);
 void				skip_double_signs(char *str, int *i);
 void				skip_quo(char *tokens_word, int *i, int quot);
@@ -118,12 +118,12 @@ void				skip_if_isalnum(char *tokens_word, int *i);
 void				ft_lstadd_back_token(t_token **lst, t_token *new);
 void				skip_double_quo(char *tokens_word, int *to_split, int *i);
 void				fill_word_sgl_quot(char *word, char *str, int *i, int *j);
-void	ft_redi_add_back(t_redir **redirections,
+void				ft_redi_add_back(t_redir **redirections,
 						t_redir *new_redir);
 void				fill_redi(enum e_token_type token_t, char *red_file,
 						t_redir **redirections, int is_true);
 void				token_new_edi_word(char *word, enum e_token_type token_t,
-						t_token **tokens_list, int i);
+						t_token **tokens_list);
 void				ft_put_token(char **line, enum e_token_type token_t,
 						t_token **tokens_list, int *heredoc);
 void				token_new_word(char *word, enum e_token_type token_t,
@@ -173,9 +173,10 @@ void				*mk_env_4expo(char **envir);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 char				*is_valid_cmd(char *cmd);
 char				*find_command_path(char *command, t_env *env);
+void				add_struc_2_env(t_env *expo_env, t_env *envir);
 // execute commands 🚀:
 int					ft_execute_one_cmd(t_minishell data);
-int					ft_execute_multi_cmd(t_minishell data);
+int					ft_execute_multi_cmd(t_minishell data, int red_result);
 // redirectios 🔁:
 int					ft_input(char *file_name, t_node *node);
 int					ft_output(char *file_name, t_node *node);
@@ -184,19 +185,16 @@ int					ft_check_redirections(t_node *nodes);
 int					main_heredoc(t_token *tokens);
 int					ft_heredoc(t_token *tokens);
 int					start_heredoc(int fd, char *limiter, t_token *token);
-int					ft_start_heredoc(int fd, char *limiter, t_token *token);
+int					ft_start_heredoc_child(int fd, char *limiter, t_token *token);
 int					process_word_segment(char **line, int *i);
 
-// error 🚨:
-void				ft_error(char *msg);
+void				dup_my_files(t_node *temp_nodes);
+void				dup2_mystd_files(int in_fd, int in_fd2);
 
-// leaks 💦:
-// void				free_env_array(char **arr);
-// ctrl (sig)
-void				handle_quit(int sig);
+// signals
+void				clean_multi_cmd(pid_t pid, t_minishell data);
+void				signals_pid(pid_t pid);
 void				handle_sigint(int sig);
 void				handle_child(int sig);
-// void	sigint_handler(int sig);
-// void	handle_here_sigquit(int sig);
 
 #endif

@@ -6,47 +6,11 @@
 /*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 10:05:58 by salaoui           #+#    #+#             */
-/*   Updated: 2024/12/13 15:21:04 by salaoui          ###   ########.fr       */
+/*   Updated: 2024/12/17 11:29:16 by salaoui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_redir_list(t_redir *redir)
-{
-	t_redir	*current;
-	t_redir	*next;
-
-	current = redir;
-	while (current != NULL)
-	{
-		next = current->next;
-		free(current->file);
-		free(current);
-		current = next;
-	}
-}
-
-void	free_node(t_node *node)
-{
-	int	i;
-
-	i = 0;
-	if (node->cmd)
-	{
-		while (node->cmd[i])
-		{
-			free(node->cmd[i]);
-			i++;
-		}
-		free(node->cmd);
-	}
-	if (node->redir)
-	{
-		free_redir_list(node->redir);
-	}
-	free(node);
-}
 
 void	free_node_list(t_node *node_list)
 {
@@ -65,7 +29,7 @@ void	free_node_list(t_node *node_list)
 	g_minishell.nodes = NULL;
 }
 
-void free_env_node(t_env *node)
+void	free_env_node(t_env *node)
 {
 	if (node)
 	{
@@ -75,9 +39,10 @@ void free_env_node(t_env *node)
 	}
 }
 
-void free_env_list(t_env *head)
+void	free_env_list(t_env *head)
 {
-	t_env *tmp;
+	t_env	*tmp;
+
 	if (!head)
 		return ;
 	while (head)
@@ -89,7 +54,7 @@ void free_env_list(t_env *head)
 	head = NULL;
 }
 
-void	free_mystructs()
+void	free_mystructs(void)
 {
 	fre_the_tokens(g_minishell.tokens);
 	free_env_list(g_minishell.envir);
@@ -97,8 +62,7 @@ void	free_mystructs()
 	free_node_list(g_minishell.nodes);
 }
 
-
-void fre_the_tokens(t_token *tokens)
+void	fre_the_tokens(t_token *tokens)
 {
 	t_token	*current;
 	t_token	*next;

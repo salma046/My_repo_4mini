@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: salaoui <salaoui@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 09:49:58 by salaoui           #+#    #+#             */
+/*   Updated: 2024/12/17 18:38:01 by salaoui          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 t_env	*make_new_node(char *envir)
@@ -41,88 +53,56 @@ t_env	*mk_env(char **envir)
 	return (head);
 }
 
+static int	get_env_size(t_env *envir)
+{
+	int	size;
+
+	size = 0;
+	while (envir)
+	{
+		size++;
+		envir = envir->next;
+	}
+	return (size);
+}
+
+static char	*join_env_parts(char *key, char *value)
+{
+	char	*first_part;
+	char	*result;
+
+	first_part = ft_strjoin(key, "=");
+	if (!first_part)
+		return (NULL);
+	result = ft_strjoin(first_part, value);
+	free(first_part);
+	return (result);
+}
+
 char	**mk_tenv_char(t_env *envir)
 {
-	t_env	*tmp;
 	char	**arr;
 	int		i;
 	int		size;
-	char	*first_part;
-	char	*second_part;
+	t_env	*tmp;
 
-	size = 0;
+	i = 0;
+	size = get_env_size(envir);
 	tmp = envir;
-	while (tmp)
-	{
-		size++;
-		tmp = tmp->next;
-	}
 	arr = malloc((size + 1) * sizeof(char *));
 	if (!arr)
 		return (NULL);
-	tmp = envir;
-	i = 0;
 	while (tmp)
 	{
-		first_part = ft_strjoin(tmp->key, "=");
-		if (!first_part)
+		arr[i] = join_env_parts(tmp->key, tmp->value);
+		if (!arr[i])
 		{
-			free(arr);
+			free_arr(arr, i);
 			return (NULL);
 		}
-		second_part = ft_strjoin(first_part, tmp->value);
-		free(first_part);
-		if (!second_part)
-		{
-			free(arr);
-			return (NULL);
-		}
-		arr[i++] = second_part;
+		i++;
 		tmp = tmp->next;
 	}
-	arr[i] = NULL;
+	arr[i] = (NULL);
 	return (arr);
-}
-
-void	add_struc_2_env(t_env *expo_env, t_env *envir)
-{
-	t_env	*head;
-	t_env	*new_env;
-
-	head = envir;
-	while (head && head->next != NULL)
-	{
-		head = head->next;
-	}
-	new_env = malloc(sizeof(t_env));
-	if (!new_env)
-		return ;
-	new_env->key = ft_strdup(expo_env->key);
-	new_env->value = rm_quot2_value(ft_strdup(expo_env->value));
-	new_env->next = NULL;
-	if (head == NULL)
-		envir = new_env;
-	else
-		head->next = new_env;
-	head = new_env;
-}
-
-void	search_check_add_env(t_env *expo_envir, t_env *env_envir)
-{
-	t_env	*to_check;
-
-	to_check = expo_envir;
-	while (to_check)
-	{
-		if (to_check->value == NULL)
-		{
-			to_check = to_check->next;
-			continue ;
-		}
-		else if (check_key(to_check->key, env_envir) != 1)
-		{
-			add_struc_2_env(to_check, env_envir);
-		}
-		to_check = to_check->next;
-	}
 }
